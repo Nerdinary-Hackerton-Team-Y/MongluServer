@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.mongle.api.controller.PostController;
 import com.mongle.api.domain.Hashtag;
 import com.mongle.api.domain.Post;
+import com.mongle.api.domain.Quest;
 import com.mongle.api.domain.User;
 import com.mongle.api.domain.enums.Status;
 import com.mongle.api.domain.mapping.PostHashtag;
@@ -19,14 +20,10 @@ import com.mongle.api.exception.handler.PostHandler;
 import com.mongle.api.repository.HashtagRepository;
 import com.mongle.api.repository.PostHashtagRepository;
 import com.mongle.api.repository.PostRepository;
+import com.mongle.api.repository.QuestRepository;
 import com.mongle.api.response.code.status.ErrorStatus;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,13 +32,19 @@ public class PostServiceImpl implements PostService {
     private final AuthService authService;
     private final PostHashtagRepository postHashtagRepository;
     private final HashtagRepository hashtagRepository;
+    private final QuestRepository questRepository;
 
     @Override
     @Transactional
-    public Post createPost(PostRequestDto.CreateDto request, User user, String imageUrl) {
+    public Post createPost(PostRequestDto.CreateDto request, User user) {
+        // Validate quest_id
+        Quest quest = questRepository.findById(request.getQuestId())
+                .orElseThrow(() -> new GeneralException(ErrorStatus.QUEST_NOT_FOUND));
+
         Post newPost = PostController.toPost(request);
         newPost.setUser(user); // Set the user
-        newPost.setStatus(Status.ACTIVATED); // Set the status
+        newPost.setQuest(quest); // Set the quest
+        newPost.setStatus(Status.ACTIVATED);
 
         List<Hashtag> hashtags = request.getHashtags().stream()
                 .map(this::getOrCreateHashtag)

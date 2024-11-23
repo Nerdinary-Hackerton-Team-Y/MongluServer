@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import lombok.Getter;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 public class PostRequestDto {
@@ -17,7 +16,7 @@ public class PostRequestDto {
         String title;
         @NotBlank
         String content;
-        MultipartFile imageUrl;
+        String imageUrl;
         Boolean isQuest;
         Integer questId = 1; // Default value
         @NotNull
@@ -34,9 +33,8 @@ public class PostRequestDto {
         String title;
         @NotBlank
         String content;
-        MultipartFile imageUrl;
+        String imageUrl;
         @NotNull
         List<String> hashtags; // Change to list of strings
     }
 }
-

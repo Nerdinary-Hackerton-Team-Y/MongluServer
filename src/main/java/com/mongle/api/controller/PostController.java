@@ -43,17 +43,7 @@ public class PostController {
     @PostMapping("/")
     public ApiResponse<PostResponseDto.CreateResultDto> createPost(HttpServletRequest request, @RequestBody @Valid PostRequestDto.CreateDto postRequest) {
         User user = AuthUtil.getUserFromRequest(request, authServiceImpl);
-        String imageUrl = null;
-
-        if (postRequest.getImageUrl() != null) {
-            try {
-                imageUrl = s3Service.uploadFile("post-images", postRequest.getImageUrl());
-            } catch (IOException e) {
-                return ApiResponse.onFailure("FILE4001", "파일 업로드에 실패했습니다.", null);
-            }
-        }
-
-        Post post = postService.createPost(postRequest, user, imageUrl);
+        Post post = postService.createPost(postRequest, user);
         return ApiResponse.onSuccess(toCreateResultDto(post));
     }
 
