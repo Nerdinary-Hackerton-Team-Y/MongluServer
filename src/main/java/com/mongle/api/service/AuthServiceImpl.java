@@ -1,5 +1,7 @@
 package com.mongle.api.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,10 +14,12 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.mongle.api.domain.User;
 import com.mongle.api.dto.auth.RegisterDto;
+import com.mongle.api.exception.GeneralException;
+import com.mongle.api.exception.UserNotLoggedInException;
 import com.mongle.api.repository.UserRepository;
+import com.mongle.api.response.code.status.ErrorStatus;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +37,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void register(RegisterDto dto) {
+        Optional<User> optional = UserRepository.findByUsername(dto.getUsername());
+        if (optional.isPresent())
+            throw new GeneralException(ErrorStatus.DUPLICATED_USERNAME);
+
         String randomNickname = randomNicknameService.getRandomNickname(nicknameSeed++);
         User user = User.builder()
                 .username(dto.getUsername())
@@ -47,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional(readOnly = true)
     public String login(String username, String password) {
         User user = UserRepository.findByUsername(username)
-                .orElseThrow();
+                .orElseThrow(UserNotLoggedInException::new);
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
             String token = JWT.create()
@@ -77,6 +85,6 @@ public class AuthServiceImpl implements AuthService {
 
         String username = decodedJWT.getSubject();
         return UserRepository.findByUsername(username)
-                .orElseThrow();
+                .orElseThrow(UserNotLoggedInException::new);
     }
 }
