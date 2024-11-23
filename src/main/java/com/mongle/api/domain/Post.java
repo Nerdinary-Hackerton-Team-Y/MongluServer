@@ -3,8 +3,15 @@ package com.mongle.api.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mongle.api.domain.enums.Status;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 import com.mongle.api.domain.common.BaseEntity;
 import com.mongle.api.domain.mapping.PostHashtag;
@@ -33,8 +40,7 @@ public class Post extends BaseEntity {
 
     private Boolean isQuest;
 
-    @Column(name = "`rank`")
-    private Integer rank;
+    private Integer score;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<LikeHistory> likeList = new ArrayList<>();
@@ -69,5 +75,4 @@ public class Post extends BaseEntity {
     public void setUser(User user) {
         this.user = user;
     }
-
 }
