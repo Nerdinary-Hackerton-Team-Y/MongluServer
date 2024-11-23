@@ -2,7 +2,7 @@
 
 # 서버의 상태를 확인하여 실행시 실패했다면 복구한다.
 
-pid=$(sudo lsof -t -i :8080)
+pid=$(sudo lsof -t -i :80)
 
 if [ -z "$pid" ]; then
   echo "Error: server is not running."
@@ -28,5 +28,5 @@ if [ -z "$pid" ]; then
 
 fi
 
-echo "PID '${pid}' is running on port 8080."
+echo "PID '${pid}' is running on port 80."
 
