@@ -26,7 +26,7 @@ jobs:
         run: |
           echo "target host: ${host}"
           echo "target username: ${username}"
-          echo "$private_key" > private_key.pem
+          echo "$private_key" > MongleKeypair.pem
           chmod 400 private_key.pem
           mkdir ~/.ssh
           echo "try adding known host"
