@@ -1,6 +1,7 @@
 package com.mongle.api.service;
 
 import com.mongle.api.controller.PostController;
+import com.mongle.api.domain.Comment;
 import com.mongle.api.domain.Hashtag;
 import com.mongle.api.domain.Post;
 import com.mongle.api.domain.User;

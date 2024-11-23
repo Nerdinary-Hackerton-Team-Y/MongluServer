@@ -1,10 +1,11 @@
 package com.mongle.api.dto.post;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
 
-import java.util.List;
+import lombok.Getter;
 
 @Getter
 public class PostRequestDto {
@@ -37,3 +38,4 @@ public class PostRequestDto {
         List<String> hashtags; // Change to list of strings
     }
 }
+
