@@ -10,7 +10,7 @@ import com.mongle.api.dto.post.PostResponseDto;
 
 public interface PostService {
 
-    List<PostResponseDto> getPosts(List<String> hashtag, Order order);
+    List<PostResponseDto> getPosts(List<String> hashtag, Order order, Boolean isquest);
     List<PostResponseDto> getPostsOfUser(User user, Order order);
     Post createPost(PostRequestDto.CreateDto request, User user);
     Post updatePost(PostRequestDto.UpdateDto request, Integer postId, User user);
