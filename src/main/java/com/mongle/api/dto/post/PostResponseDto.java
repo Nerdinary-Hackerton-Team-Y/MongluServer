@@ -17,19 +17,23 @@ public class PostResponseDto {
 
     private Integer id;
     private String imageUrl;
+    private String nickname;
     private String title;
     private String content;
     private Boolean isQuest;
     private Integer score;
+    private Integer likeCount;
 
     public static PostResponseDto of(Post post) {
         return PostResponseDto.builder()
                 .id(post.getId())
+                .nickname(post.getUser().getNickname())
                 .imageUrl(post.getImageUrl())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .isQuest(post.getIsQuest())
-//                .score(post.getScore())
+                .score(post.getScore())
+                .likeCount(post.getLikeList().size())
                 .build();
     }
 
