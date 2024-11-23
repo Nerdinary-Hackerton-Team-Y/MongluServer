@@ -92,3 +92,16 @@ CREATE TABLE `post_hashtag` (
   FOREIGN KEY (`post_id`) REFERENCES `post`(`id`),
   FOREIGN KEY (`hashtag_id`) REFERENCES `hashtag`(`id`)
 );
+
+CREATE TABLE `win_history` (
+  `id` int AUTO_INCREMENT,
+  `post_id` int,
+  `user_id` int,
+  `quest_id` int,
+  `rank` int,
+  `created_at` datetime,
+  `updated_at` datetime,
+  `deleted_at` datetime,
+  PRIMARY KEY (`id`)
+);
+
