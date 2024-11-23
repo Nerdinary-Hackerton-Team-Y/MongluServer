@@ -33,10 +33,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Post createPost(PostRequestDTO.CreateDTO request, HttpServletRequest authorizationHeader) {
+    public Post createPost(PostRequestDTO.CreateDTO request, User user) {
         Post newPost = PostController.toPost(request);
-        User user = AuthUtil.getUserFromRequest(authorizationHeader, authServiceImpl);
         newPost.setUser(user); // Set the user
+        newPost.setStatus(Status.ACTIVATED); // Set the status
 
         List<Hashtag> hashtags = request.getHashtags().stream()
                 .map(this::getOrCreateHashtag)
@@ -65,7 +65,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Post updatePost(PostRequestDTO.UpdateDTO request, Integer postId, String authorizationHeader) {
+    public Post updatePost(PostRequestDTO.UpdateDTO request, Integer postId, User user) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostHandler(ErrorStatus.POST_NOT_FOUND));
 

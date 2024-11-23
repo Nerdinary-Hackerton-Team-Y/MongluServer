@@ -3,6 +3,7 @@ package com.mongle.api.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mongle.api.domain.enums.Status;
 import jakarta.persistence.*;
 
 import com.mongle.api.domain.common.BaseEntity;
@@ -68,4 +69,5 @@ public class Post extends BaseEntity {
     public void setUser(User user) {
         this.user = user;
     }
+
 }
