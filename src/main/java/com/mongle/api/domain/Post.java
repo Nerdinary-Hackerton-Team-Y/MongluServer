@@ -1,12 +1,26 @@
 package com.mongle.api.domain;
 
-import com.mongle.api.domain.common.BaseEntity;
-import com.mongle.api.domain.mapping.PostHashtag;
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+
+import com.mongle.api.domain.common.BaseEntity;
+import com.mongle.api.domain.mapping.PostHashtag;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -18,23 +32,18 @@ public class Post extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(columnDefinition = "VARCHAR(100)")
     private String imageUrl;
 
-    @Column(columnDefinition = "VARCHAR(100)")
     private String title;
 
-    @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean isQuest;
 
-    @Column(columnDefinition = "INTEGER")
     private Integer rank;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Like> likeList = new ArrayList<>();
+    private List<LikeHistory> likeList = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> commentList = new ArrayList<>();
@@ -44,10 +53,10 @@ public class Post extends BaseEntity {
     private List<PostHashtag> postHashtagList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "questId")
+    @JoinColumn(name = "quest_id")
     private Quest quest;
 }
