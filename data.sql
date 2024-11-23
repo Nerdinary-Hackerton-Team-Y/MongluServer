@@ -31,3 +31,17 @@ INSERT INTO like_history (post_id, user_id)
 VALUES (3, 2);
 INSERT INTO like_history (post_id, user_id)
 VALUES (3, 3);
+
+INSERT INTO hashtag (tag)
+VALUES ("고양이");
+INSERT INTO hashtag (tag)
+VALUES ("용");
+INSERT INTO hashtag (tag)
+VALUES ("개");
+
+INSERT INTO post_hashtag (post_id, hashtag_id)
+VALUES (1, 1);
+INSERT INTO post_hashtag (post_id, hashtag_id)
+VALUES (2, 1);
+INSERT INTO post_hashtag (post_id, hashtag_id)
+VALUES (3, 1);
