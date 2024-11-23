@@ -6,7 +6,7 @@ CREATE TABLE `User` (
                         `password` varchar(100),
                         `profilePictureUrl` varchar(20),
                         `status` 'activated' | 'deactivated',
-                        `joinedAt` datetime,
+                        `createdAt` datetime,
                         `updatedAt` datetime,
                         `deletedAt` datetime,
                         PRIMARY KEY (`Id`)
@@ -14,7 +14,6 @@ CREATE TABLE `User` (
 
 CREATE TABLE `Quest` (
                          `Id` int,
-                         `postId` int,
                          `title` varchar(100),
                          `status` 'activated' | 'deactivated',
                          `createdAt` datetime,
@@ -26,16 +25,19 @@ CREATE TABLE `Quest` (
 CREATE TABLE `Post` (
                         `Id` int,
                         `userId` int,
+                        `questId` int,
                         `imageUrl` varchar(100),
+                        `title` varchar(100),
                         `content` varchar(100),
-                        `isQuest` int,
+                        `isQuest` boolean,
+                        `rank` int,
                         `status` 'activated' | 'deactivated',
                         `createdAt` datetime,
                         `updatedAt` datetime,
                         `deletedAt` datetime,
                         PRIMARY KEY (`Id`),
                         FOREIGN KEY (`userId`) REFERENCES `User`(`Id`),
-                        FOREIGN KEY (`content`) REFERENCES `Quest`(`Id`)
+                        FOREIGN KEY (`questId`) REFERENCES `Quest`(`Id`)
 );
 
 CREATE TABLE `Comment` (
@@ -49,7 +51,7 @@ CREATE TABLE `Comment` (
                            `deletedAt` datetime,
                            PRIMARY KEY (`Id`),
                            FOREIGN KEY (`userId`) REFERENCES `User`(`Id`),
-                           FOREIGN KEY (`deletedAt`) REFERENCES `Post`(`Id`)
+                           FOREIGN KEY (`postId`) REFERENCES `Post`(`Id`)
 );
 
 CREATE TABLE `Like` (
@@ -62,7 +64,7 @@ CREATE TABLE `Like` (
                         `deletedAt` datetime,
                         PRIMARY KEY (`Id`),
                         FOREIGN KEY (`userId`) REFERENCES `User`(`Id`),
-                        FOREIGN KEY (`Id`) REFERENCES `Post`(`Id`)
+                        FOREIGN KEY (`postId`) REFERENCES `Post`(`Id`)
 );
 
 CREATE TABLE `Hashtag` (
@@ -80,7 +82,7 @@ CREATE TABLE `PostHashtag` (
                                `postId` int,
                                `hashtagId` int,
                                PRIMARY KEY (`Id`),
-                               FOREIGN KEY (`Id`) REFERENCES `Post`(`Id`),
-                               FOREIGN KEY (`postId`) REFERENCES `Hashtag`(`Id`)
+                               FOREIGN KEY (`Id`) REFERENCES `Post`(`createdAt`),
+                               FOREIGN KEY (`postId`) REFERENCES `Hashtag`(`updatedAt`)
 );
 
