@@ -4,7 +4,7 @@
 
 pid=$(sudo lsof -t -i :80)
 if [ -n "$pid" ]; then
-  kill $pid
+  sudo kill $pid
   echo "${pid} closed."
   exit 0
 fi
