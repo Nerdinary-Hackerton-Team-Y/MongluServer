@@ -39,3 +39,10 @@ out/
 ### VS Code ###
 .vscode/
 
+*.pem
+<<<<<<< HEAD
+=======
+.DS_Store
+.idea
+build/
+>>>>>>> main

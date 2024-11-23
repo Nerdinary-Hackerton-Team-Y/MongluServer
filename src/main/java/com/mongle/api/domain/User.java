@@ -1,11 +1,22 @@
 package com.mongle.api.domain;
 
-import com.mongle.api.domain.common.BaseEntity;
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
+import com.mongle.api.domain.common.BaseEntity;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -17,19 +28,12 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(100)")
-    private String name;
-
-    @Column(nullable = false, columnDefinition = "VARCHAR(100)")
     private String username;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(100)")
     private String nickname;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(100)")
     private String password;
 
-    @Column(columnDefinition = "VARCHAR(20)")
     private String profilePictureUrl;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -39,6 +43,6 @@ public class User extends BaseEntity {
     private List<Comment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Like> hashtagList = new ArrayList<>();
+    private List<LikeHistory> hashtagList = new ArrayList<>();
 
 }
