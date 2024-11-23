@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -37,5 +39,13 @@ public class CommentService {
     public Comment findById(Integer commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.COMMENT_NOT_FOUND));
+    }
+
+    public List<CommentResDto> findByPostId(Integer postId) {
+        List<Comment> comments = commentRepository.findByPostId(postId);
+
+        return comments.stream()
+                .map(CommentResDto::new)
+                .toList();
     }
 }

@@ -12,8 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Objects;
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/comments")
@@ -35,11 +34,18 @@ public class CommentController {
     }
 
     @DeleteMapping
-    public void deleteComment(@RequestParam(name = "postId", required = true) Integer commentId,
+    public void deleteComment(@RequestParam(name = "commentId", required = true) Integer commentId,
                               HttpServletRequest request) {
         Comment comment = commentService.findById(commentId);
         User user = authController.getUserInfo(request);
 
-        commentRepository.delete(comment);
     }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse> getComments(@RequestParam(name = "postId", required = true) Integer postId,
+                                                   HttpServletRequest request) {
+        List<CommentResDto> commentListResDto = commentService.findByPostId(postId);
+        return ResponseEntity.ok(ApiResponse.onSuccess(commentListResDto));
+    }
+
 }
