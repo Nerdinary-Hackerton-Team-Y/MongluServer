@@ -19,6 +19,12 @@ fi
 chmod 755 scripts/deploy/*
 scp -i MongleKeypair.pem -r scripts/deploy/* "${username}@${host}:deploy"
 
+# Upload sql schema
+scp -i MongleKeypair.pem -r schema.sql "${username}@${host}:~"
+
+# Update database
+ssh -i MongleKeypair.pem "${username}@${host}" "deploy/load_schema.sh"
+
 # Kill current running Spring process
 ssh -i MongleKeypair.pem "${username}@${host}" "deploy/shutdown.sh; deploy/backup.sh"
 

@@ -48,6 +48,12 @@ jobs:
           sudo chmod 755 scripts/deploy/*
           scp -i MongleKeypair.pem -r scripts/deploy/* "${username}@${host}:deploy"
 
+      - name: Upload sql schema
+        run: scp -i MongleKeypair.pem -r schema.sql "${username}@${host}:~"
+
+      - name: Update database
+        run: ssh -i MongleKeypair.pem "${username}@${host}" "deploy/load_schema.sh"
+
       - name: Kill current running Spring process
         run: ssh -i MongleKeypair.pem "${username}@${host}" "deploy/shutdown.sh; deploy/backup.sh"
 
