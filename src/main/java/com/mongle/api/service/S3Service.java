@@ -79,11 +79,11 @@ public class S3Service {
         return fileName.substring(fileName.lastIndexOf("."));
     }
 
-    // 파일 확장자 체크 (.jpg, .png만 허용)
+    // 파일 확장자 체크
     private boolean validateImageFileExtension(String fileName) {
         String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
 
-        return fileExtension.equals("jpg") || fileExtension.equals("png");
+        return fileExtension.equals("jpg") || fileExtension.equals("png") || fileExtension.equals("jpeg");
     }
 
     public void deleteFile(String folderName, String fileName) {
