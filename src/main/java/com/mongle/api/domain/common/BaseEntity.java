@@ -32,4 +32,8 @@ public abstract class BaseEntity {
     private LocalDateTime updatedAt;
 
     private LocalDateTime deletedAt;
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }

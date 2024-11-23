@@ -13,7 +13,6 @@ import jakarta.persistence.OneToMany;
 import com.mongle.api.domain.common.BaseEntity;
 import com.mongle.api.domain.mapping.PostHashtag;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 public class Hashtag extends BaseEntity {
     @Id
@@ -33,4 +32,8 @@ public class Hashtag extends BaseEntity {
 
     @OneToMany(mappedBy = "hashtag", cascade = CascadeType.ALL)
     private List<PostHashtag> postHashtagList = new ArrayList<>();
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 }

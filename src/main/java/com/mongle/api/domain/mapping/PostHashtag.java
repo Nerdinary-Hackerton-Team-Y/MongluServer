@@ -1,12 +1,7 @@
 package com.mongle.api.domain.mapping;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.mongle.api.domain.enums.Status;
+import jakarta.persistence.*;
 
 import com.mongle.api.domain.Hashtag;
 import com.mongle.api.domain.Post;
@@ -23,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class PostHashtag extends BaseEntity {
+public class PostHashtag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -35,4 +30,16 @@ public class PostHashtag extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hashtag_id")
     private Hashtag hashtag;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'ACTIVATED'")
+    private Status status;
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+    public void setHashtag(Hashtag hashtag) {
+        this.hashtag = hashtag;
+    }
 }
