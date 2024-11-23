@@ -62,4 +62,12 @@ public class CommentService {
 
         commentRepository.delete(comment);
     }
+
+    public List<CommentResDto> findByUserId(Integer userId) {
+        List<Comment> comments = commentRepository.findByUserId(userId);
+
+        return comments.stream()
+                .map(CommentResDto::new)
+                .toList();
+    }
 }

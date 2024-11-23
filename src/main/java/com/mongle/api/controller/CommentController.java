@@ -42,11 +42,18 @@ public class CommentController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse> getComments(@RequestParam(name = "postId", required = true) Integer postId,
+    public ResponseEntity<ApiResponse> getPostComments(@RequestParam(name = "postId", required = true) Integer postId,
                                                    HttpServletRequest request) {
         List<CommentResDto> commentListResDto = commentService.findByPostId(postId);
 
         return ResponseEntity.ok(ApiResponse.onSuccess(commentListResDto));
     }
 
+    @GetMapping("/user")
+    public ResponseEntity<ApiResponse> getUserComments(HttpServletRequest request) {
+        User user = authController.getUserInfo(request);
+        List<CommentResDto> commentListResDto = commentService.findByUserId(user.getId());
+
+        return ResponseEntity.ok(ApiResponse.onSuccess(commentListResDto));
+    }
 }
