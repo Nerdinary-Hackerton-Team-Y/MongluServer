@@ -24,14 +24,10 @@ jobs:
         env:
           private_key: ${{ secrets.EC2_PRIVATE_KEY }}
         run: |
-          echo "target host: ${host}"
-          echo "target username: ${username}"
           echo "$private_key" > MongleKeypair.pem
           chmod 400 MongleKeypair.pem
           mkdir ~/.ssh
-          echo "try adding known host"
-          ssh-keyscan -t rsa $host > ~/.ssh/known_hosts
-
+          ssh-keyscan -t rsa 3.34.57.141 > ~/.ssh/known_hosts
 
       - name: Setup Java JDK
         uses: actions/setup-java@v4.2.1
@@ -50,7 +46,7 @@ jobs:
       - name: Upload deployment scripts
         run: |
           sudo chmod 755 script/deploy/*
-          scp -i MongleKeypair.pem -r script/deploy/* "${username}@${host}:deploy"
+          scp -i MongleKeypair.pem -r scripts/deploy/* "${username}@${host}:deploy"
 
       - name: Kill current running Spring process
         run: ssh -i MongleKeypair.pem "${username}@${host}" "deploy/shutdown.sh; deploy/backup.sh"
