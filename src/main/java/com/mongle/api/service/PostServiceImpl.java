@@ -86,8 +86,15 @@ public class PostServiceImpl implements PostService {
         return postRepository.save(post);
     }
 
+    @Override
+    public void uploadPostImage(User user, String fileUrl) {
+
+    }
+
     public Post findById(Integer postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.POST_NOT_FOUND));
     }
+
+
 }

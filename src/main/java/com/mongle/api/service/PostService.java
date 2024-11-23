@@ -8,4 +8,6 @@ public interface PostService {
     Post createPost(PostRequestDto.CreateDto request, User user);
     Post updatePost(PostRequestDto.UpdateDto request, Integer postId, User user);
     Post deletePost(Integer postId, User user);
+
+    void uploadPostImage(User user, String fileUrl);
 }
