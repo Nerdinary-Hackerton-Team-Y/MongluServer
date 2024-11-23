@@ -1,12 +1,14 @@
 package com.mongle.api.service;
 
 import com.mongle.api.controller.PostController;
+import com.mongle.api.domain.Comment;
 import com.mongle.api.domain.Hashtag;
 import com.mongle.api.domain.Post;
 import com.mongle.api.domain.User;
 import com.mongle.api.domain.enums.Status;
 import com.mongle.api.domain.mapping.PostHashtag;
 import com.mongle.api.dto.post.PostRequestDTO;
+import com.mongle.api.exception.GeneralException;
 import com.mongle.api.exception.handler.PostHandler;
 import com.mongle.api.repository.HashtagRepository;
 import com.mongle.api.repository.PostHashtagRepository;
@@ -72,5 +74,10 @@ public class PostServiceImpl implements PostService {
         post.setImageUrl(request.getImageUrl());
 
         return postRepository.save(post);
+    }
+
+    public Post findById(Integer postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.POST_NOT_FOUND));
     }
 }
