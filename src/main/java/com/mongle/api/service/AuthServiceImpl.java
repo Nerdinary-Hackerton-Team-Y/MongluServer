@@ -15,6 +15,7 @@ import com.mongle.api.dto.auth.RegisterDto;
 import com.mongle.api.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @Service
 @RequiredArgsConstructor
@@ -78,5 +79,4 @@ public class AuthServiceImpl implements AuthService {
         return UserRepository.findByUsername(username)
                 .orElseThrow();
     }
-
 }
