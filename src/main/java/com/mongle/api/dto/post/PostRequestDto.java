@@ -7,10 +7,10 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class PostRequestDTO {
+public class PostRequestDto {
 
     @Getter
-    public static class CreateDTO {
+    public static class CreateDto {
         @NotBlank
         String title;
         @NotBlank
@@ -21,13 +21,13 @@ public class PostRequestDTO {
         @NotNull
         List<String> hashtags; // Change to list of strings
 
-        public CreateDTO() {
+        public CreateDto() {
             this.questId = 1; // Default value
         }
     }
 
     @Getter
-    public static class UpdateDTO {
+    public static class UpdateDto {
         @NotBlank
         String title;
         @NotBlank

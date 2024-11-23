@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-public class PostResponseDTO {
+public class PostResponseDto {
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CreateResultDTO {
+    public static class CreateResultDto {
         Integer postId;
         LocalDateTime createdAt;
     }
@@ -22,7 +22,7 @@ public class PostResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UpdateResultDTO {
+    public static class UpdateResultDto {
         Integer postId;
         LocalDateTime updatedAt;
     }
@@ -31,7 +31,7 @@ public class PostResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class DeleteResultDTO {
+    public static class DeleteResultDto {
         Integer postId;
         Status status;
         LocalDateTime deletedAt;

@@ -3,8 +3,8 @@ package com.mongle.api.controller;
 import com.mongle.api.domain.Post;
 import com.mongle.api.domain.Quest;
 import com.mongle.api.domain.User;
-import com.mongle.api.dto.post.PostRequestDTO;
-import com.mongle.api.dto.post.PostResponseDTO;
+import com.mongle.api.dto.post.PostRequestDto;
+import com.mongle.api.dto.post.PostResponseDto;
 import com.mongle.api.response.ApiResponse;
 import com.mongle.api.service.AuthServiceImpl;
 import com.mongle.api.service.PostService;
@@ -24,20 +24,20 @@ public class PostController {
     private final AuthServiceImpl authServiceImpl;
 
     @PostMapping("/")
-    public ApiResponse<PostResponseDTO.CreateResultDTO> createPost(HttpServletRequest request, @RequestBody @Valid PostRequestDTO.CreateDTO postRequest) {
+    public ApiResponse<PostResponseDto.CreateResultDto> createPost(HttpServletRequest request, @RequestBody @Valid PostRequestDto.CreateDto postRequest) {
         User user = AuthUtil.getUserFromRequest(request, authServiceImpl);
         Post post = postService.createPost(postRequest, user);
-        return ApiResponse.onSuccess(toCreateResultDTO(post));
+        return ApiResponse.onSuccess(toCreateResultDto(post));
     }
 
-    public static PostResponseDTO.CreateResultDTO toCreateResultDTO(Post post) {
-        return PostResponseDTO.CreateResultDTO.builder()
+    public static PostResponseDto.CreateResultDto toCreateResultDto(Post post) {
+        return PostResponseDto.CreateResultDto.builder()
                 .postId(post.getId())
                 .createdAt(LocalDateTime.now())
                 .build();
     }
 
-    public static Post toPost(PostRequestDTO.CreateDTO request) {
+    public static Post toPost(PostRequestDto.CreateDto request) {
         Quest quest = Quest.builder().id(request.getQuestId()).build();
         return Post.builder()
                 .title(request.getTitle())
@@ -49,23 +49,23 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    public ApiResponse<PostResponseDTO.UpdateResultDTO> updatePost(
+    public ApiResponse<PostResponseDto.UpdateResultDto> updatePost(
             HttpServletRequest request,
-            @RequestBody @Valid PostRequestDTO.UpdateDTO postRequest,
+            @RequestBody @Valid PostRequestDto.UpdateDto postRequest,
             @PathVariable Integer postId) {
         User user = AuthUtil.getUserFromRequest(request, authServiceImpl);
         Post post = postService.updatePost(postRequest, postId, user);
         return ApiResponse.onSuccess(toUpdateResultDTO(post));
     }
 
-    public static PostResponseDTO.UpdateResultDTO toUpdateResultDTO(Post post) {
-        return PostResponseDTO.UpdateResultDTO.builder()
+    public static PostResponseDto.UpdateResultDto toUpdateResultDTO(Post post) {
+        return PostResponseDto.UpdateResultDto.builder()
                 .postId(post.getId())
                 .updatedAt(LocalDateTime.now())
                 .build();
     }
 
-    public static Post toPost(PostRequestDTO.UpdateDTO request) {
+    public static Post toPost(PostRequestDto.UpdateDto request) {
         return Post.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
@@ -74,7 +74,7 @@ public class PostController {
     }
 
     @PatchMapping("/{postId}")
-    public ApiResponse<PostResponseDTO.DeleteResultDTO> deletePost(
+    public ApiResponse<PostResponseDto.DeleteResultDto> deletePost(
             HttpServletRequest request,
             @PathVariable Integer postId) {
         User user = AuthUtil.getUserFromRequest(request, authServiceImpl);
@@ -82,8 +82,8 @@ public class PostController {
         return ApiResponse.onSuccess(toDeleteResultDTO(post));
     }
 
-    public static PostResponseDTO.DeleteResultDTO toDeleteResultDTO(Post post) {
-        return PostResponseDTO.DeleteResultDTO.builder()
+    public static PostResponseDto.DeleteResultDto toDeleteResultDTO(Post post) {
+        return PostResponseDto.DeleteResultDto.builder()
                 .postId(post.getId())
                 .status(post.getStatus())
                 .deletedAt(LocalDateTime.now())
