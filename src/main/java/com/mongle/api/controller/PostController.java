@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mongle.api.domain.Post;
 import com.mongle.api.domain.Quest;
+import com.mongle.api.domain.User;
 import com.mongle.api.dto.post.PostRequestDto;
 import com.mongle.api.dto.post.PostResponseDto;
 import com.mongle.api.response.ApiResponse;
 import com.mongle.api.service.AuthServiceImpl;
 import com.mongle.api.service.PostService;
+import com.mongle.api.util.AuthUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -75,6 +77,13 @@ public class PostController {
                 .title(request.getTitle())
                 .content(request.getContent())
                 .imageUrl(request.getImageUrl())
+                .build();
+    }
+
+    private PostResponseDto.UpdateResultDto toUpdateResultDTO(Post post) {
+        return PostResponseDto.UpdateResultDto.builder()
+                .postId(post.getId())
+                .updatedAt(post.getUpdatedAt())
                 .build();
     }
 }

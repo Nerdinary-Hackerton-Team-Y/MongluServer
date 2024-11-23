@@ -9,7 +9,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.mongle.api.controller.PostController;
-import com.mongle.api.domain.Comment;
 import com.mongle.api.domain.Hashtag;
 import com.mongle.api.domain.Post;
 import com.mongle.api.domain.User;
@@ -29,16 +28,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
-    private final AuthServiceImpl authServiceImpl;
+    private final AuthService authService;
     private final PostHashtagRepository postHashtagRepository;
     private final HashtagRepository hashtagRepository;
 
     @Override
     @Transactional
     public Post createPost(PostRequestDto.CreateDto request, HttpServletRequest authorizationHeader) {
+        User user = AuthUtil.getUserFromRequest(authorizationHeader, authService);
         Post newPost = PostController.toPost(request);
         newPost.setUser(user); // Set the user
-        newPost.setStatus(Status.ACTIVATED); // Set the status
+        newPost.setStatus(Status.ACTIVATED);
 
         List<Hashtag> hashtags = request.getHashtags().stream()
                 .map(this::getOrCreateHashtag)
@@ -48,7 +48,6 @@ public class PostServiceImpl implements PostService {
             PostHashtag postHashtag = PostHashtag.builder()
                     .post(newPost)
                     .hashtag(hashtag)
-                    .status(Status.ACTIVATED) // Set status to 'ACTIVATED'
                     .build();
             postHashtagRepository.save(postHashtag);
         });
@@ -67,7 +66,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Post updatePost(PostRequestDto.UpdateDto request, Integer postId, String authorizationHeader) {
+    public Post updatePost(PostRequestDto.UpdateDto request, Integer postId, User user) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostHandler(ErrorStatus.POST_NOT_FOUND));
 
