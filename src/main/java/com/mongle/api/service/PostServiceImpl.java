@@ -1,42 +1,42 @@
 package com.mongle.api.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import jakarta.transaction.Transactional;
+
+import org.springframework.stereotype.Service;
+
 import com.mongle.api.controller.PostController;
-import com.mongle.api.domain.Comment;
 import com.mongle.api.domain.Hashtag;
 import com.mongle.api.domain.Post;
 import com.mongle.api.domain.User;
 import com.mongle.api.domain.enums.Status;
 import com.mongle.api.domain.mapping.PostHashtag;
-import com.mongle.api.dto.post.PostRequestDTO;
+import com.mongle.api.dto.post.PostRequestDto;
 import com.mongle.api.exception.GeneralException;
 import com.mongle.api.exception.handler.PostHandler;
 import com.mongle.api.repository.HashtagRepository;
 import com.mongle.api.repository.PostHashtagRepository;
 import com.mongle.api.repository.PostRepository;
 import com.mongle.api.response.code.status.ErrorStatus;
-import com.mongle.api.util.AuthUtil;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
-    private final AuthServiceImpl authServiceImpl;
+    private final AuthService authService;
     private final PostHashtagRepository postHashtagRepository;
     private final HashtagRepository hashtagRepository;
 
     @Override
     @Transactional
-    public Post createPost(PostRequestDTO.CreateDTO request, User user) {
+    public Post createPost(PostRequestDto.CreateDto request, User user) {
         Post newPost = PostController.toPost(request);
         newPost.setUser(user); // Set the user
-        newPost.setStatus(Status.ACTIVATED); // Set the status
+        newPost.setStatus(Status.ACTIVATED);
 
         List<Hashtag> hashtags = request.getHashtags().stream()
                 .map(this::getOrCreateHashtag)
@@ -46,7 +46,6 @@ public class PostServiceImpl implements PostService {
             PostHashtag postHashtag = PostHashtag.builder()
                     .post(newPost)
                     .hashtag(hashtag)
-                    .status(Status.ACTIVATED) // Set status to 'ACTIVATED'
                     .build();
             postHashtagRepository.save(postHashtag);
         });
@@ -65,13 +64,24 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Post updatePost(PostRequestDTO.UpdateDTO request, Integer postId, User user) {
+    public Post updatePost(PostRequestDto.UpdateDto request, Integer postId, User user) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostHandler(ErrorStatus.POST_NOT_FOUND));
 
         post.setTitle(request.getTitle());
         post.setContent(request.getContent());
         post.setImageUrl(request.getImageUrl());
+
+        return postRepository.save(post);
+    }
+
+    @Override
+    @Transactional
+    public Post deletePost(Integer postId, User user) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostHandler(ErrorStatus.POST_NOT_FOUND));
+
+        post.setStatus(Status.DEACTIVATED); // Set the status to 'DELETED'
 
         return postRepository.save(post);
     }

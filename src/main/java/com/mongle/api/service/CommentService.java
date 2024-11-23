@@ -1,5 +1,10 @@
 package com.mongle.api.service;
 
+import java.util.List;
+import java.util.Objects;
+
+import org.springframework.stereotype.Service;
+
 import com.mongle.api.domain.Comment;
 import com.mongle.api.domain.Post;
 import com.mongle.api.domain.User;
@@ -7,24 +12,23 @@ import com.mongle.api.dto.comment.CommentReqDto;
 import com.mongle.api.dto.comment.CommentResDto;
 import com.mongle.api.exception.GeneralException;
 import com.mongle.api.repository.CommentRepository;
+import com.mongle.api.repository.PostRepository;
 import com.mongle.api.response.code.status.ErrorStatus;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Objects;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class CommentService {
-    private final PostServiceImpl postService;
+    private final PostRepository PostRepository;
     private final UserService userService;
     private final CommentRepository commentRepository;
 
     public CommentResDto createComment(Integer postId, Integer userId, CommentReqDto commentReqDto) {
-        Post post = postService.findById(postId);
+        Post post = PostRepository.findById(postId)
+                .orElseThrow();
         User user = userService.findById(userId);
 
         Comment comment = Comment.builder()
