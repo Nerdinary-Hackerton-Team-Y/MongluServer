@@ -2,10 +2,13 @@ package com.mongle.api.controller;
 
 import com.mongle.api.domain.Post;
 import com.mongle.api.domain.Quest;
+import com.mongle.api.domain.User;
 import com.mongle.api.dto.post.PostRequestDTO;
 import com.mongle.api.dto.post.PostResponseDTO;
 import com.mongle.api.response.ApiResponse;
+import com.mongle.api.service.AuthServiceImpl;
 import com.mongle.api.service.PostService;
+import com.mongle.api.util.AuthUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +21,12 @@ import java.time.LocalDateTime;
 @RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
+    private final AuthServiceImpl authServiceImpl;
 
     @PostMapping("/")
     public ApiResponse<PostResponseDTO.CreateResultDTO> createPost(HttpServletRequest request, @RequestBody @Valid PostRequestDTO.CreateDTO postRequest) {
-        Post post = postService.createPost(postRequest, request);
+        User user = AuthUtil.getUserFromRequest(request, authServiceImpl);
+        Post post = postService.createPost(postRequest, user);
         return ApiResponse.onSuccess(toCreateResultDTO(post));
     }
 
@@ -48,7 +53,8 @@ public class PostController {
             HttpServletRequest request,
             @RequestBody @Valid PostRequestDTO.UpdateDTO postRequest,
             @PathVariable Integer postId) {
-        Post post = postService.updatePost(postRequest, postId, request.getHeader("Authorization"));
+        User user = AuthUtil.getUserFromRequest(request, authServiceImpl);
+        Post post = postService.updatePost(postRequest, postId, user);
         return ApiResponse.onSuccess(toUpdateResultDTO(post));
     }
 
