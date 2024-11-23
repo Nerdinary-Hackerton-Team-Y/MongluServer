@@ -22,4 +22,15 @@ public class PostRequestDTO {
             this.questId = 1; // Default value
         }
     }
+
+    @Getter
+    public static class UpdateDTO {
+        @NotBlank
+        String title;
+        @NotBlank
+        String content;
+        String imageUrl;
+        @NotBlank
+        String hashtagName;
+    }
 }

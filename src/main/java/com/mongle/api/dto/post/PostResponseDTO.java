@@ -16,4 +16,13 @@ public class PostResponseDTO {
         Integer postId;
         LocalDateTime createdAt;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateResultDTO {
+        Integer postId;
+        LocalDateTime updatedAt;
+    }
 }

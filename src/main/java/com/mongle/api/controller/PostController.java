@@ -7,11 +7,7 @@ import com.mongle.api.response.ApiResponse;
 import com.mongle.api.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -41,6 +37,30 @@ public class PostController {
                 .imageUrl(request.getImageUrl())
                 .isQuest(request.getIsQuest())
                 .questId(request.getQuestId())
+                .build();
+    }
+
+    @PutMapping("/{postId}")
+    public ApiResponse<PostResponseDTO.UpdateResultDTO> updatePost(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody @Valid PostRequestDTO.UpdateDTO request,
+            @PathVariable Integer postId) {
+        Post post = postService.updatePost(request, postId, authorizationHeader);
+        return ApiResponse.onSuccess(toUpdateResultDTO(post));
+    }
+
+    public static PostResponseDTO.UpdateResultDTO toUpdateResultDTO(Post post) {
+        return PostResponseDTO.UpdateResultDTO.builder()
+                .postId(post.getId())
+                .updatedAt(LocalDateTime.now())
+                .build();
+    }
+
+    public static Post toPost(PostRequestDTO.UpdateDTO request) {
+        return Post.builder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .imageUrl(request.getImageUrl())
                 .build();
     }
 }

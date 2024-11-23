@@ -6,6 +6,7 @@ import com.mongle.api.domain.Post;
 import com.mongle.api.domain.User;
 import com.mongle.api.domain.mapping.PostHashtag;
 import com.mongle.api.dto.post.PostRequestDTO;
+import com.mongle.api.exception.handler.PostHandler;
 import com.mongle.api.exception.handler.UserHandler;
 import com.mongle.api.repository.HashtagRepository;
 import com.mongle.api.repository.PostHashtagRepository;
@@ -58,5 +59,19 @@ public class PostServiceImpl implements PostService {
                 });
 
         return hashtag;
+    }
+
+    @Override
+    @Transactional
+    public Post updatePost(PostRequestDTO.UpdateDTO request, Integer postId, String authorizationHeader) {
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostHandler(ErrorStatus.POST_NOT_FOUND));
+
+        post.setTitle(request.getTitle());
+        post.setContent(request.getContent());
+        post.setImageUrl(request.getImageUrl());
+
+        return postRepository.save(post);
     }
 }
