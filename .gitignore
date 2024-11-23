@@ -7,3 +7,5 @@ build/
 .factorypath
 .project
 *.pem
+.DS_Store
+.idea
