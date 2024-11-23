@@ -3,17 +3,18 @@ package com.mongle.api.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import jakarta.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mongle.api.controller.PostController;
 import com.mongle.api.domain.Hashtag;
 import com.mongle.api.domain.Post;
 import com.mongle.api.domain.User;
+import com.mongle.api.domain.enums.Order;
 import com.mongle.api.domain.enums.Status;
 import com.mongle.api.domain.mapping.PostHashtag;
 import com.mongle.api.dto.post.PostRequestDto;
+import com.mongle.api.dto.post.PostResponseDto;
 import com.mongle.api.exception.GeneralException;
 import com.mongle.api.exception.handler.PostHandler;
 import com.mongle.api.repository.HashtagRepository;
@@ -30,6 +31,48 @@ public class PostServiceImpl implements PostService {
     private final PostHashtagRepository postHashtagRepository;
     private final HashtagRepository hashtagRepository;
 
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PostResponseDto> getPostsOfUser(User user, Order order) {
+        List<Post> posts;
+
+        if (order == Order.Date) {
+            posts = postRepository.findAllByOrderByCreatedAt();
+        } else {
+            posts = postRepository.findAllByOrderByScoreDesc();
+        }
+
+        return posts.stream()
+                .filter(p -> p.getUser().getId().equals(user.getId()))
+                .map(PostResponseDto::of)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PostResponseDto> getPosts(List<String> hashtag, Order order) {
+        List<Post> posts;
+
+        if (order == Order.Date) {
+            posts = postRepository.findAllByOrderByCreatedAt();
+        } else {
+            posts = postRepository.findAllByOrderByScoreDesc();
+        }
+
+        if (hashtag.size() > 0) {
+            posts = posts.stream()
+                    .filter(p -> {
+                        return p.getPostHashtagList().stream().anyMatch(ph -> ph.getHashtag().getTag().equals(hashtag.get(0)));
+                    })
+                    .toList();
+        }
+
+        return posts.stream()
+                .map(PostResponseDto::of)
+                .toList();
+    }
+
     @Override
     @Transactional
     public Post createPost(PostRequestDto.CreateDto request, User user) {
@@ -45,6 +88,7 @@ public class PostServiceImpl implements PostService {
             PostHashtag postHashtag = PostHashtag.builder()
                     .post(newPost)
                     .hashtag(hashtag)
+
                     .build();
             postHashtagRepository.save(postHashtag);
         });
