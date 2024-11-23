@@ -23,4 +23,13 @@ public class S3Controller {
         String fileUrl = s3Service.uploadFile(folder, file);
         return ResponseEntity.ok(ApiResponse.onSuccess(fileUrl));
     }
+
+    @DeleteMapping
+    public ResponseEntity<ApiResponse> deleteFile(
+            @RequestParam("folder") String folder,
+            @RequestParam("fileName") String fileName) {
+        s3Service.deleteFile(folder, fileName);
+        return ResponseEntity.ok(ApiResponse.onSuccess("파일 삭제 성공"));
+    }
+
 }

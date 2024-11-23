@@ -85,4 +85,15 @@ public class S3Service {
 
         return fileExtension.equals("jpg") || fileExtension.equals("png");
     }
+
+    public void deleteFile(String folderName, String fileName) {
+        try {
+            String fileKey = folderName + "/" + fileName;
+            amazonS3.deleteObject(bucket, fileKey);
+        } catch (Exception e) {
+            log.error("파일 삭제 중 오류 발생: {}", e.getMessage());
+            throw new GeneralException(ErrorStatus.FILE_DELETE_FAILED);
+        }
+    }
+
 }
