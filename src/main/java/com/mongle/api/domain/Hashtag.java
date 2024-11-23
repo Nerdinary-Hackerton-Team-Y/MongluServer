@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor()
 @AllArgsConstructor
 public class Hashtag extends BaseEntity {
     @Id
@@ -33,4 +33,8 @@ public class Hashtag extends BaseEntity {
 
     @OneToMany(mappedBy = "hashtag", cascade = CascadeType.ALL)
     private List<PostHashtag> postHashtagList = new ArrayList<>();
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 }

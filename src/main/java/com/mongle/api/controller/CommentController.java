@@ -21,7 +21,6 @@ public class CommentController {
 
     private final CommentService commentService;
     private final AuthController authController;
-    private final UserService userService;
 
     @PostMapping
     public ResponseEntity<ApiResponse> createComment(@RequestParam(name = "postId", required = true) Integer postId,

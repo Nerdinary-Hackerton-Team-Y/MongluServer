@@ -7,6 +7,7 @@ import com.mongle.api.domain.dto.CommentReqDto;
 import com.mongle.api.domain.dto.CommentResDto;
 import com.mongle.api.exception.GeneralException;
 import com.mongle.api.repository.CommentRepository;
+import com.mongle.api.repository.PostRepository;
 import com.mongle.api.response.code.status.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +19,12 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class CommentService {
+    private final PostServiceImpl postService;
     private final UserService userService;
     private final CommentRepository commentRepository;
 
     public CommentResDto createComment(Integer postId, Integer userId, CommentReqDto commentReqDto) {
-        Post post = postRepository.findById(postId);
+        Post post = postService.findById(postId);
         User user = userService.findById(userId);
 
         Comment comment = Comment.builder()
