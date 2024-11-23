@@ -38,4 +38,3 @@ public class PostRequestDto {
         List<String> hashtags; // Change to list of strings
     }
 }
-

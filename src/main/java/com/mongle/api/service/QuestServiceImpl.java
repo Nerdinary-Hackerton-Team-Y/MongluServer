@@ -30,7 +30,7 @@ public class QuestServiceImpl implements QuestService {
     @Transactional(readOnly = true)
     public QuestResponseDto getCurrentQuest() {
         Quest quest = getCurrent();
-        Collections.sort(quest.getPostList(), (p1, p2) -> p2.getScore() - p1.getScore());
+//        Collections.sort(quest.getPostList(), (p1, p2) -> p2.getScore() - p1.getScore());
 
         return QuestResponseDto.of(quest);
     }
@@ -39,7 +39,7 @@ public class QuestServiceImpl implements QuestService {
     public QuestDetermineResultDto determineWinner() {
         Quest quest = getCurrent();
         List<Post> posts = quest.getPostList();
-        Collections.sort(posts, (p1, p2) -> p2.getScore() - p1.getScore());
+//        Collections.sort(posts, (p1, p2) -> p2.getScore() - p1.getScore());
         
         List<WinHistory> list = new ArrayList<>();
         for (int score = 1; score <= Math.min(3, posts.size()); score++) {
