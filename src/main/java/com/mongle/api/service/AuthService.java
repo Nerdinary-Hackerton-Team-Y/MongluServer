@@ -7,7 +7,7 @@ public interface AuthService {
 
     void register(RegisterDto dto);
     String login(String username, String password);
-    User getUserFromToken(String token);
+    User getUserFronToken(String token);
     String getTokenFromHeader(String authorizationHeader);
 
 }

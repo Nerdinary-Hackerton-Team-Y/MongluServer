@@ -18,9 +18,6 @@ public class User extends BaseEntity {
     private Integer id;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(100)")
-    private String name;
-
-    @Column(nullable = false, columnDefinition = "VARCHAR(100)")
     private String username;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(100)")
