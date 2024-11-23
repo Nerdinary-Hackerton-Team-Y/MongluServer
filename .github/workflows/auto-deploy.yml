@@ -45,7 +45,7 @@ jobs:
 
       - name: Upload deployment scripts
         run: |
-          sudo chmod 755 script/deploy/*
+          sudo chmod 755 scripts/deploy/*
           scp -i MongleKeypair.pem -r scripts/deploy/* "${username}@${host}:deploy"
 
       - name: Kill current running Spring process
