@@ -40,4 +40,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<LikeHistory> hashtagList = new ArrayList<>();
 
+    public void setProfileImageUrl(String fileUrl) {
+        this.profilePictureUrl = fileUrl;
+    }
 }
