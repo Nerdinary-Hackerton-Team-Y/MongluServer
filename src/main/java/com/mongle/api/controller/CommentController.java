@@ -2,11 +2,10 @@ package com.mongle.api.controller;
 
 import com.mongle.api.domain.Comment;
 import com.mongle.api.domain.User;
-import com.mongle.api.domain.dto.CommentReqDto;
-import com.mongle.api.domain.dto.CommentResDto;
+import com.mongle.api.dto.comment.CommentReqDto;
+import com.mongle.api.dto.comment.CommentResDto;
 import com.mongle.api.response.ApiResponse;
 import com.mongle.api.service.CommentService;
-import com.mongle.api.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

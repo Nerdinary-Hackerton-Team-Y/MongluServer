@@ -1,4 +1,4 @@
-package com.mongle.api.domain.dto;
+package com.mongle.api.dto.comment;
 
 import com.mongle.api.domain.Comment;
 import lombok.AllArgsConstructor;
@@ -13,12 +13,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentResDto {
+    private Integer commentId;
     private String nickname;
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updateAt;
 
     public CommentResDto(Comment comment) {
+        this.commentId = comment.getId();
         this.nickname = comment.getUser().getNickname();
         this.content = comment.getContent();
         this.createdAt = comment.getCreatedAt();

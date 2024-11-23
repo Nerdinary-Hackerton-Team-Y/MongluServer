@@ -1,4 +1,4 @@
-package com.mongle.api.domain.dto;
+package com.mongle.api.dto.comment;
 
 import lombok.Getter;
 
