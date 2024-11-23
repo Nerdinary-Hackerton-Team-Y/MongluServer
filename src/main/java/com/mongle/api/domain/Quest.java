@@ -17,6 +17,7 @@ public class Quest extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(columnDefinition = "VARCHAR(100)")
     private String title;
 
     @OneToMany(mappedBy = "quest", cascade = CascadeType.ALL)
