@@ -1,5 +1,6 @@
 package com.mongle.api.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,9 +11,9 @@ import com.mongle.api.domain.Post;
 import com.mongle.api.domain.Quest;
 import com.mongle.api.domain.WinHistory;
 import com.mongle.api.domain.enums.Status;
+import com.mongle.api.dto.quest.QuestDetermineResultDto;
 import com.mongle.api.dto.quest.QuestResponseDto;
 import com.mongle.api.repository.QuestRepository;
-import com.mongle.api.repository.UserRepository;
 import com.mongle.api.repository.WinHistoryRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -28,24 +29,31 @@ public class QuestServiceImpl implements QuestService {
     @Override
     @Transactional(readOnly = true)
     public QuestResponseDto getCurrentQuest() {
-        return QuestResponseDto.of(getCurrent());
+        Quest quest = getCurrent();
+        Collections.sort(quest.getPostList(), (p1, p2) -> p2.getScore() - p1.getScore());
+
+        return QuestResponseDto.of(quest);
     }
 
     @Override
-    public void determineWinner() {
+    public QuestDetermineResultDto determineWinner() {
         Quest quest = getCurrent();
         List<Post> posts = quest.getPostList();
-        Collections.sort(posts, (p1, p2) -> p2.getRank() - p1.getRank());
+        Collections.sort(posts, (p1, p2) -> p2.getScore() - p1.getScore());
         
-        for (int rank = 1; rank <= Math.min(3, posts.size()); rank++) {
+        List<WinHistory> list = new ArrayList<>();
+        for (int score = 1; score <= Math.min(3, posts.size()); score++) {
             WinHistory winHistory = WinHistory.builder()
-                    .rank(rank)
-                    .post(posts.get(rank - 1))
+                    .score(score)
+                    .post(posts.get(score - 1))
                     .quest(quest)
-                    .user(posts.get(rank - 1).getUser())
+                    .user(posts.get(score - 1).getUser())
                     .build();
+            list.add(winHistory);
             winHistoryRepository.save(winHistory);
         }
+
+        return QuestDetermineResultDto.of(list);
     }
 
     private Quest getCurrent() {

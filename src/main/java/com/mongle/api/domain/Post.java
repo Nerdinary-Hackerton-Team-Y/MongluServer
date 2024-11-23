@@ -40,7 +40,7 @@ public class Post extends BaseEntity {
 
     private Boolean isQuest;
 
-    private Integer rank;
+    private Integer score;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<LikeHistory> likeList = new ArrayList<>();

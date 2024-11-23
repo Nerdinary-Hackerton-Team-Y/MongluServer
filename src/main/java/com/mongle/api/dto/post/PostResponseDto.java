@@ -14,7 +14,7 @@ public class PostResponseDto {
     private String title;
     private String content;
     private Boolean isQuest;
-    private Integer rank;
+    private Integer score;
 
     public static PostResponseDto of(Post post) {
         return PostResponseDto.builder()
@@ -23,7 +23,7 @@ public class PostResponseDto {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .isQuest(post.getIsQuest())
-                .rank(post.getRank())
+                .score(post.getScore())
                 .build();
     }
 }
