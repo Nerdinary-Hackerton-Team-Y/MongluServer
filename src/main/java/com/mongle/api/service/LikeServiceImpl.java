@@ -71,4 +71,21 @@ public class LikeServiceImpl implements LikeService {
                 .deleteddAt(LocalDateTime.now())
                 .build();
     }
+
+    @Override
+    @Transactional
+    public LikeResponseDto.GetLikesResultDto getLikes(Integer postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostHandler(ErrorStatus.POST_NOT_FOUND));
+
+        int likeCount = likeRepository.countByPost(post);
+
+        return LikeResponseDto.GetLikesResultDto.builder()
+                .likeId(likeRepository.findByPost(post).getId())
+                .PostId(post.getId())
+                .likeCount(likeCount)
+                .status(post.getStatus())
+                .build();
+    }
+
 }

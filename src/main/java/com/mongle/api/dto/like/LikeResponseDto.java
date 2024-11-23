@@ -31,4 +31,15 @@ public class LikeResponseDto {
         Status status;
         LocalDateTime deleteddAt;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GetLikesResultDto {
+        Long likeId;
+        Integer PostId;
+        Integer likeCount;
+        Status status;
+    }
 }

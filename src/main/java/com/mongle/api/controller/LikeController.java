@@ -32,4 +32,10 @@ public class LikeController {
         LikeResponseDto.DeleteResultDto result = likeService.deleteLike(postId, user.getId(), likeId);
         return ApiResponse.onSuccess(result);
     }
+
+    @GetMapping("/")
+    public ApiResponse<LikeResponseDto.GetLikesResultDto> getLikes(@PathVariable Integer postId) {
+        LikeResponseDto.GetLikesResultDto result = likeService.getLikes(postId);
+        return ApiResponse.onSuccess(result);
+    }
 }
