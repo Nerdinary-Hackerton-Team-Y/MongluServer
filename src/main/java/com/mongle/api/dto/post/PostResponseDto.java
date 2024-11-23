@@ -1,9 +1,14 @@
 package com.mongle.api.dto.post;
 
+import java.time.LocalDateTime;
+
 import com.mongle.api.domain.Post;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -25,5 +30,23 @@ public class PostResponseDto {
                 .isQuest(post.getIsQuest())
                 .score(post.getScore())
                 .build();
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CreateResultDto {
+        Integer postId;
+        LocalDateTime createdAt;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateResultDto {
+        Integer postId;
+        LocalDateTime updatedAt;
     }
 }
