@@ -1,6 +1,5 @@
 .DS_Store
 .env
-application.yml
 
 HELP.md
 .gradle
