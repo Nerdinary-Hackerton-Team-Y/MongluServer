@@ -28,14 +28,14 @@ CREATE TABLE `Post` (
                         `userId` int,
                         `imageUrl` varchar(100),
                         `content` varchar(100),
-                        `isQuest` int,
+                        `isQuest` boolean,
                         `status` 'activated' | 'deactivated',
                         `createdAt` datetime,
                         `updatedAt` datetime,
                         `deletedAt` datetime,
                         PRIMARY KEY (`Id`),
                         FOREIGN KEY (`userId`) REFERENCES `User`(`Id`),
-                        FOREIGN KEY (`content`) REFERENCES `Quest`(`Id`)
+                        FOREIGN KEY (`questId`) REFERENCES `Quest`(`Id`)
 );
 
 CREATE TABLE `Comment` (
@@ -49,7 +49,7 @@ CREATE TABLE `Comment` (
                            `deletedAt` datetime,
                            PRIMARY KEY (`Id`),
                            FOREIGN KEY (`userId`) REFERENCES `User`(`Id`),
-                           FOREIGN KEY (`deletedAt`) REFERENCES `Post`(`Id`)
+                           FOREIGN KEY (`postId`) REFERENCES `Post`(`Id`)
 );
 
 CREATE TABLE `Like` (
@@ -62,7 +62,7 @@ CREATE TABLE `Like` (
                         `deletedAt` datetime,
                         PRIMARY KEY (`Id`),
                         FOREIGN KEY (`userId`) REFERENCES `User`(`Id`),
-                        FOREIGN KEY (`Id`) REFERENCES `Post`(`Id`)
+                        FOREIGN KEY (`postId`) REFERENCES `Post`(`Id`)
 );
 
 CREATE TABLE `Hashtag` (
@@ -80,7 +80,7 @@ CREATE TABLE `PostHashtag` (
                                `postId` int,
                                `hashtagId` int,
                                PRIMARY KEY (`Id`),
-                               FOREIGN KEY (`Id`) REFERENCES `Post`(`Id`),
-                               FOREIGN KEY (`postId`) REFERENCES `Hashtag`(`Id`)
+                               FOREIGN KEY (`postId`) REFERENCES `Post`(`Id`),
+                               FOREIGN KEY (`hasgtagId`) REFERENCES `Hashtag`(`Id`)
 );
 
