@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mongle.api.domain.User;
 import com.mongle.api.dto.auth.RegisterDto;
 import com.mongle.api.service.AuthService;
+import com.mongle.api.util.AuthUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -39,10 +40,8 @@ public class AuthController {
     }
 
     @GetMapping("/info")
-    public User getUserInfo(HttpServletRequest request) {
-        String token = request.getHeader("Authorization")
-                .split(" ")[1];
-        return authService.getUserFronToken(token);
+    public User getUserInfo(HttpServletRequest req) {
+        return AuthUtil.getUserFromRequest(req, authService);
     }
 
 }
