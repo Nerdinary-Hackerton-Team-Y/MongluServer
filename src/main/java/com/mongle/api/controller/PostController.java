@@ -19,13 +19,9 @@ import com.mongle.api.domain.User;
 import com.mongle.api.domain.enums.Order;
 import com.mongle.api.dto.post.PostRequestDto;
 import com.mongle.api.dto.post.PostResponseDto;
-import com.mongle.api.dto.post.PostRequestDto;
-import com.mongle.api.dto.post.PostResponseDto;
 import com.mongle.api.response.ApiResponse;
 import com.mongle.api.service.AuthService;
 import com.mongle.api.service.PostService;
-import com.mongle.api.response.code.status.ErrorStatus;
-import com.mongle.api.util.AuthUtil;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
