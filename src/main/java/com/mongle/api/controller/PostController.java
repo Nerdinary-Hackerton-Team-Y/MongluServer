@@ -17,6 +17,7 @@ import com.mongle.api.domain.Quest;
 import com.mongle.api.dto.post.PostRequestDto;
 import com.mongle.api.dto.post.PostResponseDto;
 import com.mongle.api.response.ApiResponse;
+import com.mongle.api.service.AuthServiceImpl;
 import com.mongle.api.service.PostService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
+    private final AuthServiceImpl authServiceImpl;
 
     @PostMapping("/")
     public ApiResponse<PostResponseDto.CreateResultDto> createPost(HttpServletRequest request, @RequestBody @Valid PostRequestDto.CreateDto postRequest) {
@@ -56,8 +58,9 @@ public class PostController {
             HttpServletRequest request,
             @RequestBody @Valid PostRequestDto.UpdateDto postRequest,
             @PathVariable Integer postId) {
-        Post post = postService.updatePost(postRequest, postId, request.getHeader("Authorization"));
-        return ApiResponse.onSuccess(toUpdateResultDto(post));
+        User user = AuthUtil.getUserFromRequest(request, authServiceImpl);
+        Post post = postService.updatePost(postRequest, postId, user);
+        return ApiResponse.onSuccess(toUpdateResultDTO(post));
     }
 
     public static PostResponseDto.UpdateResultDto toUpdateResultDto(Post post) {

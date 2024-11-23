@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.mongle.api.controller.PostController;
+import com.mongle.api.domain.Comment;
 import com.mongle.api.domain.Hashtag;
 import com.mongle.api.domain.Post;
 import com.mongle.api.domain.User;
@@ -36,8 +37,8 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public Post createPost(PostRequestDto.CreateDto request, HttpServletRequest authorizationHeader) {
         Post newPost = PostController.toPost(request);
-        User user = AuthUtil.getUserFromRequest(authorizationHeader, authServiceImpl);
         newPost.setUser(user); // Set the user
+        newPost.setStatus(Status.ACTIVATED); // Set the status
 
         List<Hashtag> hashtags = request.getHashtags().stream()
                 .map(this::getOrCreateHashtag)
