@@ -3,7 +3,6 @@ package com.mongle.api.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
@@ -15,12 +14,12 @@ import com.mongle.api.domain.User;
 import com.mongle.api.domain.enums.Status;
 import com.mongle.api.domain.mapping.PostHashtag;
 import com.mongle.api.dto.post.PostRequestDto;
+import com.mongle.api.exception.GeneralException;
 import com.mongle.api.exception.handler.PostHandler;
 import com.mongle.api.repository.HashtagRepository;
 import com.mongle.api.repository.PostHashtagRepository;
 import com.mongle.api.repository.PostRepository;
 import com.mongle.api.response.code.status.ErrorStatus;
-import com.mongle.api.util.AuthUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,8 +33,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Post createPost(PostRequestDto.CreateDto request, HttpServletRequest authorizationHeader) {
-        User user = AuthUtil.getUserFromRequest(authorizationHeader, authService);
+    public Post createPost(PostRequestDto.CreateDto request, User user) {
         Post newPost = PostController.toPost(request);
         newPost.setUser(user); // Set the user
         newPost.setStatus(Status.ACTIVATED);
@@ -75,5 +73,21 @@ public class PostServiceImpl implements PostService {
         post.setImageUrl(request.getImageUrl());
 
         return postRepository.save(post);
+    }
+
+    @Override
+    @Transactional
+    public Post deletePost(Integer postId, User user) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostHandler(ErrorStatus.POST_NOT_FOUND));
+
+        post.setStatus(Status.DEACTIVATED); // Set the status to 'DELETED'
+
+        return postRepository.save(post);
+    }
+
+    public Post findById(Integer postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.POST_NOT_FOUND));
     }
 }

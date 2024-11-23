@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -33,7 +34,8 @@ public class PostController {
 
     @PostMapping("/")
     public ApiResponse<PostResponseDto.CreateResultDto> createPost(HttpServletRequest request, @RequestBody @Valid PostRequestDto.CreateDto postRequest) {
-        Post post = postService.createPost(postRequest, request);
+        User user = AuthUtil.getUserFromRequest(request, authServiceImpl);
+        Post post = postService.createPost(postRequest, user);
         return ApiResponse.onSuccess(toCreateResultDto(post));
     }
 
@@ -62,7 +64,7 @@ public class PostController {
             @PathVariable Integer postId) {
         User user = AuthUtil.getUserFromRequest(request, authServiceImpl);
         Post post = postService.updatePost(postRequest, postId, user);
-        return ApiResponse.onSuccess(toUpdateResultDTO(post));
+        return ApiResponse.onSuccess(toUpdateResultDto(post));
     }
 
     public static PostResponseDto.UpdateResultDto toUpdateResultDto(Post post) {
@@ -80,10 +82,21 @@ public class PostController {
                 .build();
     }
 
-    private PostResponseDto.UpdateResultDto toUpdateResultDTO(Post post) {
-        return PostResponseDto.UpdateResultDto.builder()
+    @PatchMapping("/{postId}")
+    public ApiResponse<PostResponseDto.DeleteResultDto> deletePost(
+            HttpServletRequest request,
+            @PathVariable Integer postId) {
+        User user = AuthUtil.getUserFromRequest(request, authServiceImpl);
+        Post post = postService.deletePost(postId, user);
+        return ApiResponse.onSuccess(toDeleteResultDto(post));
+    }
+
+    public static PostResponseDto.DeleteResultDto toDeleteResultDto(Post post) {
+        return PostResponseDto.DeleteResultDto.builder()
                 .postId(post.getId())
-                .updatedAt(post.getUpdatedAt())
+                .status(post.getStatus())
+                .deletedAt(LocalDateTime.now())
                 .build();
     }
+
 }
