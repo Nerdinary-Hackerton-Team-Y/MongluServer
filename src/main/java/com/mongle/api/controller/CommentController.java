@@ -33,17 +33,20 @@ public class CommentController {
     }
 
     @DeleteMapping
-    public void deleteComment(@RequestParam(name = "commentId", required = true) Integer commentId,
+    public ResponseEntity<ApiResponse> deleteComment(@RequestParam(name = "commentId", required = true) Integer commentId,
                               HttpServletRequest request) {
         Comment comment = commentService.findById(commentId);
         User user = authController.getUserInfo(request);
+        commentService.deleteComment(commentId, user.getId());
 
+        return ResponseEntity.ok(ApiResponse.onSuccess("댓글 삭제 성공"));
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse> getComments(@RequestParam(name = "postId", required = true) Integer postId,
                                                    HttpServletRequest request) {
         List<CommentResDto> commentListResDto = commentService.findByPostId(postId);
+
         return ResponseEntity.ok(ApiResponse.onSuccess(commentListResDto));
     }
 
