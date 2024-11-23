@@ -72,4 +72,21 @@ public class PostController {
                 .imageUrl(request.getImageUrl())
                 .build();
     }
+
+    @PatchMapping("/{postId}")
+    public ApiResponse<PostResponseDTO.DeleteResultDTO> deletePost(
+            HttpServletRequest request,
+            @PathVariable Integer postId) {
+        User user = AuthUtil.getUserFromRequest(request, authServiceImpl);
+        Post post = postService.deletePost(postId, user);
+        return ApiResponse.onSuccess(toDeleteResultDTO(post));
+    }
+
+    public static PostResponseDTO.DeleteResultDTO toDeleteResultDTO(Post post) {
+        return PostResponseDTO.DeleteResultDTO.builder()
+                .postId(post.getId())
+                .status(post.getStatus())
+                .deletedAt(LocalDateTime.now())
+                .build();
+    }
 }

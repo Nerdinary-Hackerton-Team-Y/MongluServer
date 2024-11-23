@@ -73,4 +73,15 @@ public class PostServiceImpl implements PostService {
 
         return postRepository.save(post);
     }
+
+    @Override
+    @Transactional
+    public Post deletePost(Integer postId, User user) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostHandler(ErrorStatus.POST_NOT_FOUND));
+
+        post.setStatus(Status.DEACTIVATED); // Set the status to 'DELETED'
+
+        return postRepository.save(post);
+    }
 }
