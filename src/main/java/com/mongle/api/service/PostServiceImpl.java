@@ -1,7 +1,6 @@
 package com.mongle.api.service;
 
 import com.mongle.api.controller.PostController;
-import com.mongle.api.domain.Comment;
 import com.mongle.api.domain.Hashtag;
 import com.mongle.api.domain.Post;
 import com.mongle.api.domain.User;
@@ -18,6 +17,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,16 +25,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
-    private final AuthServiceImpl authServiceImpl;
     private final PostHashtagRepository postHashtagRepository;
     private final HashtagRepository hashtagRepository;
 
     @Override
     @Transactional
-    public Post createPost(PostRequestDto.CreateDto request, User user) {
+    public Post createPost(PostRequestDto.CreateDto request, User user, String imageUrl) {
         Post newPost = PostController.toPost(request);
         newPost.setUser(user); // Set the user
         newPost.setStatus(Status.ACTIVATED); // Set the status
+        newPost.setImageUrl(imageUrl); // Set the image URL
 
         List<Hashtag> hashtags = request.getHashtags().stream()
                 .map(this::getOrCreateHashtag)
@@ -69,7 +69,7 @@ public class PostServiceImpl implements PostService {
 
         post.setTitle(request.getTitle());
         post.setContent(request.getContent());
-        post.setImageUrl(request.getImageUrl());
+        post.setImageUrl(String.valueOf(request.getImageUrl()));
 
         return postRepository.save(post);
     }

@@ -1,7 +1,10 @@
 package com.mongle.api.controller;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
+import com.mongle.api.service.S3Service;
+import com.mongle.api.util.AuthUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
@@ -17,16 +20,13 @@ import com.mongle.api.domain.Quest;
 import com.mongle.api.domain.User;
 import com.mongle.api.dto.post.PostRequestDto;
 import com.mongle.api.dto.post.PostResponseDto;
-import com.mongle.api.dto.post.PostRequestDto;
-import com.mongle.api.dto.post.PostResponseDto;
 import com.mongle.api.response.ApiResponse;
 import com.mongle.api.service.AuthServiceImpl;
 import com.mongle.api.service.PostService;
+import com.mongle.api.response.code.status.ErrorStatus;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,11 +34,22 @@ import java.time.LocalDateTime;
 public class PostController {
     private final PostService postService;
     private final AuthServiceImpl authServiceImpl;
+    private final S3Service s3Service;
 
     @PostMapping("/")
     public ApiResponse<PostResponseDto.CreateResultDto> createPost(HttpServletRequest request, @RequestBody @Valid PostRequestDto.CreateDto postRequest) {
         User user = AuthUtil.getUserFromRequest(request, authServiceImpl);
-        Post post = postService.createPost(postRequest, user);
+        String imageUrl = null;
+
+        if (postRequest.getImageUrl() != null) {
+            try {
+                imageUrl = s3Service.uploadFile("post-images", postRequest.getImageUrl());
+            } catch (IOException e) {
+                return ApiResponse.onFailure("FILE4001", "파일 업로드에 실패했습니다.", null);
+            }
+        }
+
+        Post post = postService.createPost(postRequest, user, imageUrl);
         return ApiResponse.onSuccess(toCreateResultDto(post));
     }
 
@@ -54,7 +65,7 @@ public class PostController {
         return Post.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
-                .imageUrl(request.getImageUrl())
+                .imageUrl(String.valueOf(request.getImageUrl()))
                 .isQuest(request.getIsQuest())
                 .quest(quest)
                 .build();
@@ -81,7 +92,7 @@ public class PostController {
         return Post.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
-                .imageUrl(request.getImageUrl())
+                .imageUrl(String.valueOf(request.getImageUrl()))
                 .build();
     }
 
