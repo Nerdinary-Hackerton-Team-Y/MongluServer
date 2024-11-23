@@ -8,6 +8,7 @@ import com.mongle.api.util.AuthUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,10 +21,13 @@ import com.mongle.api.domain.Quest;
 import com.mongle.api.domain.User;
 import com.mongle.api.dto.post.PostRequestDto;
 import com.mongle.api.dto.post.PostResponseDto;
+import com.mongle.api.dto.post.PostRequestDto;
+import com.mongle.api.dto.post.PostResponseDto;
 import com.mongle.api.response.ApiResponse;
 import com.mongle.api.service.AuthServiceImpl;
 import com.mongle.api.service.PostService;
 import com.mongle.api.response.code.status.ErrorStatus;
+import com.mongle.api.util.AuthUtil;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -78,10 +82,10 @@ public class PostController {
             @PathVariable Integer postId) {
         User user = AuthUtil.getUserFromRequest(request, authServiceImpl);
         Post post = postService.updatePost(postRequest, postId, user);
-        return ApiResponse.onSuccess(toUpdateResultDTO(post));
+        return ApiResponse.onSuccess(toUpdateResultDto(post));
     }
 
-    public static PostResponseDto.UpdateResultDto toUpdateResultDTO(Post post) {
+    public static PostResponseDto.UpdateResultDto toUpdateResultDto(Post post) {
         return PostResponseDto.UpdateResultDto.builder()
                 .postId(post.getId())
                 .updatedAt(LocalDateTime.now())
@@ -102,10 +106,10 @@ public class PostController {
             @PathVariable Integer postId) {
         User user = AuthUtil.getUserFromRequest(request, authServiceImpl);
         Post post = postService.deletePost(postId, user);
-        return ApiResponse.onSuccess(toDeleteResultDTO(post));
+        return ApiResponse.onSuccess(toDeleteResultDto(post));
     }
 
-    public static PostResponseDto.DeleteResultDto toDeleteResultDTO(Post post) {
+    public static PostResponseDto.DeleteResultDto toDeleteResultDto(Post post) {
         return PostResponseDto.DeleteResultDto.builder()
                 .postId(post.getId())
                 .status(post.getStatus())

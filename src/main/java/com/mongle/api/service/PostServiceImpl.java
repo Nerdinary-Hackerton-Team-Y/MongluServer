@@ -1,5 +1,12 @@
 package com.mongle.api.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import jakarta.transaction.Transactional;
+
+import org.springframework.stereotype.Service;
+
 import com.mongle.api.controller.PostController;
 import com.mongle.api.domain.Hashtag;
 import com.mongle.api.domain.Post;
@@ -13,7 +20,7 @@ import com.mongle.api.repository.HashtagRepository;
 import com.mongle.api.repository.PostHashtagRepository;
 import com.mongle.api.repository.PostRepository;
 import com.mongle.api.response.code.status.ErrorStatus;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +32,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
+    private final AuthService authService;
     private final PostHashtagRepository postHashtagRepository;
     private final HashtagRepository hashtagRepository;
 
@@ -34,7 +42,6 @@ public class PostServiceImpl implements PostService {
         Post newPost = PostController.toPost(request);
         newPost.setUser(user); // Set the user
         newPost.setStatus(Status.ACTIVATED); // Set the status
-        newPost.setImageUrl(imageUrl); // Set the image URL
 
         List<Hashtag> hashtags = request.getHashtags().stream()
                 .map(this::getOrCreateHashtag)
@@ -44,7 +51,6 @@ public class PostServiceImpl implements PostService {
             PostHashtag postHashtag = PostHashtag.builder()
                     .post(newPost)
                     .hashtag(hashtag)
-                    .status(Status.ACTIVATED) // Set status to 'ACTIVATED'
                     .build();
             postHashtagRepository.save(postHashtag);
         });

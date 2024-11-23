@@ -1,17 +1,15 @@
 package com.mongle.api.dto.post;
 
-import com.mongle.api.domain.enums.Status;
 import java.time.LocalDateTime;
 
 import com.mongle.api.domain.Post;
+import com.mongle.api.domain.enums.Status;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @Builder
