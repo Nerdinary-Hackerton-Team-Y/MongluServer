@@ -5,7 +5,9 @@ import com.mongle.api.domain.Post;
 import com.mongle.api.domain.User;
 import com.mongle.api.domain.dto.CommentReqDto;
 import com.mongle.api.domain.dto.CommentResDto;
+import com.mongle.api.exception.GeneralException;
 import com.mongle.api.repository.CommentRepository;
+import com.mongle.api.response.code.status.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,4 +34,8 @@ public class CommentService {
         return new CommentResDto(comment);
     }
 
+    public Comment findById(Integer commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.COMMENT_NOT_FOUND));
+    }
 }
