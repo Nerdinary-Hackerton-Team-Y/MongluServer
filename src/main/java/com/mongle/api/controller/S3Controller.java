@@ -19,9 +19,8 @@ public class S3Controller {
     @PostMapping
     public ResponseEntity<ApiResponse> uploadFile(
             @RequestParam("folder") String folder,
-            @RequestParam("fileName") String fileName,
             @RequestParam("file") MultipartFile file) throws IOException {
-        String fileUrl = s3Service.uploadFile(folder, fileName, file);
+        String fileUrl = s3Service.uploadFile(folder, file);
         return ResponseEntity.ok(ApiResponse.onSuccess(fileUrl));
     }
 }
