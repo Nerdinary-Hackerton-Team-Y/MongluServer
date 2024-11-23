@@ -34,7 +34,7 @@ public class CommentController {
     @DeleteMapping
     public ResponseEntity<ApiResponse> deleteComment(@RequestParam(name = "commentId", required = true) Integer commentId,
                               HttpServletRequest request) {
-        Comment comment = commentService.findById(commentId);
+        commentService.findById(commentId);
         User user = authController.getUserInfo(request);
         commentService.deleteComment(commentId, user.getId());
 
@@ -45,6 +45,7 @@ public class CommentController {
     public ResponseEntity<ApiResponse> getPostComments(@RequestParam(name = "postId", required = true) Integer postId,
                                                    HttpServletRequest request) {
         List<CommentResDto> commentListResDto = commentService.findByPostId(postId);
+        authController.getUserInfo(request);
 
         return ResponseEntity.ok(ApiResponse.onSuccess(commentListResDto));
     }
