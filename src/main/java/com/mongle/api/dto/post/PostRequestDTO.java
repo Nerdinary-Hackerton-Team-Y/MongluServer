@@ -1,7 +1,10 @@
 package com.mongle.api.dto.post;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 public class PostRequestDTO {
@@ -15,8 +18,8 @@ public class PostRequestDTO {
         String imageUrl;
         Boolean isQuest;
         Integer questId = 1; // Default value
-        @NotBlank
-        String hashtagName; // Add this field to capture hashtag input
+        @NotNull
+        List<String> hashtags; // Change to list of strings
 
         public CreateDTO() {
             this.questId = 1; // Default value
@@ -30,7 +33,7 @@ public class PostRequestDTO {
         @NotBlank
         String content;
         String imageUrl;
-        @NotBlank
-        String hashtagName;
+        @NotNull
+        List<String> hashtags; // Change to list of strings
     }
 }

@@ -79,11 +79,4 @@ public class AuthServiceImpl implements AuthService {
         return UserRepository.findByUsername(username)
                 .orElseThrow();
     }
-
-    @Override
-    public String getTokenFromHeader(@RequestHeader("Authorization") String authorizationHeader) {
-        // Split the header to get the token
-        String token = authorizationHeader.split(" ")[1];
-        return token;
-    }
 }

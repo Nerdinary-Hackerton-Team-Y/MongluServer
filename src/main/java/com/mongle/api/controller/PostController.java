@@ -1,10 +1,12 @@
 package com.mongle.api.controller;
 
 import com.mongle.api.domain.Post;
+import com.mongle.api.domain.Quest;
 import com.mongle.api.dto.post.PostRequestDTO;
 import com.mongle.api.dto.post.PostResponseDTO;
 import com.mongle.api.response.ApiResponse;
 import com.mongle.api.service.PostService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +20,8 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/")
-    public ApiResponse<PostResponseDTO.CreateResultDTO> createPost(@RequestHeader("Authorization") String authorizationHeader, @RequestBody @Valid PostRequestDTO.CreateDTO request) {
-        Post post = postService.createPost(request, authorizationHeader);
+    public ApiResponse<PostResponseDTO.CreateResultDTO> createPost(HttpServletRequest request, @RequestBody @Valid PostRequestDTO.CreateDTO postRequest) {
+        Post post = postService.createPost(postRequest, request);
         return ApiResponse.onSuccess(toCreateResultDTO(post));
     }
 
@@ -31,21 +33,22 @@ public class PostController {
     }
 
     public static Post toPost(PostRequestDTO.CreateDTO request) {
+        Quest quest = Quest.builder().id(request.getQuestId()).build();
         return Post.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
                 .imageUrl(request.getImageUrl())
                 .isQuest(request.getIsQuest())
-                .questId(request.getQuestId())
+                .quest(quest)
                 .build();
     }
 
     @PutMapping("/{postId}")
     public ApiResponse<PostResponseDTO.UpdateResultDTO> updatePost(
-            @RequestHeader("Authorization") String authorizationHeader,
-            @RequestBody @Valid PostRequestDTO.UpdateDTO request,
+            HttpServletRequest request,
+            @RequestBody @Valid PostRequestDTO.UpdateDTO postRequest,
             @PathVariable Integer postId) {
-        Post post = postService.updatePost(request, postId, authorizationHeader);
+        Post post = postService.updatePost(postRequest, postId, request.getHeader("Authorization"));
         return ApiResponse.onSuccess(toUpdateResultDTO(post));
     }
 

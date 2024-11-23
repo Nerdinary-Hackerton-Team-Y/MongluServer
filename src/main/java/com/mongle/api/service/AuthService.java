@@ -8,6 +8,4 @@ public interface AuthService {
     void register(RegisterDto dto);
     String login(String username, String password);
     User getUserFronToken(String token);
-    String getTokenFromHeader(String authorizationHeader);
-
 }
