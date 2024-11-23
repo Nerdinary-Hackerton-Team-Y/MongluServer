@@ -29,11 +29,11 @@ public class PostHashtag extends BaseEntity {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "postId")
+    @JoinColumn(name = "post_id")
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hashtagId")
+    @JoinColumn(name = "hashtag_id")
     private Hashtag hashtag;
 
     public void setPost(Post post) {
