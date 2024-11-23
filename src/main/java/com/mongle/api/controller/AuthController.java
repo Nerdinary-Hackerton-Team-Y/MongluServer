@@ -25,13 +25,12 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public void login(
+    public String login(
         @RequestParam(name = "username", required = true) String username,
         @RequestParam(name = "password", required = true) String password,
         HttpServletResponse response
     ) {
-        String token = authService.login(username, password);
-        response.addHeader("Authorization", "Bearer " + token);
+        return authService.login(username, password);
     }
 
     @PostMapping("/register")
