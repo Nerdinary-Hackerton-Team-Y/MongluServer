@@ -1,5 +1,6 @@
 package com.mongle.api.dto.post;
 
+import com.mongle.api.domain.enums.Status;
 import java.time.LocalDateTime;
 
 import com.mongle.api.domain.Post;
@@ -9,6 +10,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -49,4 +52,15 @@ public class PostResponseDto {
         Integer postId;
         LocalDateTime updatedAt;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DeleteResultDto {
+        Integer postId;
+        Status status;
+        LocalDateTime deletedAt;
+    }
 }
+

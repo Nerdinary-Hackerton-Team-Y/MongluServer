@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mongle.api.domain.Post;
 import com.mongle.api.domain.Quest;
+import com.mongle.api.domain.User;
+import com.mongle.api.dto.post.PostRequestDto;
+import com.mongle.api.dto.post.PostResponseDto;
 import com.mongle.api.dto.post.PostRequestDto;
 import com.mongle.api.dto.post.PostResponseDto;
 import com.mongle.api.response.ApiResponse;
@@ -21,6 +24,9 @@ import com.mongle.api.service.AuthServiceImpl;
 import com.mongle.api.service.PostService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,7 +37,8 @@ public class PostController {
 
     @PostMapping("/")
     public ApiResponse<PostResponseDto.CreateResultDto> createPost(HttpServletRequest request, @RequestBody @Valid PostRequestDto.CreateDto postRequest) {
-        Post post = postService.createPost(postRequest, request);
+        User user = AuthUtil.getUserFromRequest(request, authServiceImpl);
+        Post post = postService.createPost(postRequest, user);
         return ApiResponse.onSuccess(toCreateResultDto(post));
     }
 
@@ -63,7 +70,7 @@ public class PostController {
         return ApiResponse.onSuccess(toUpdateResultDTO(post));
     }
 
-    public static PostResponseDto.UpdateResultDto toUpdateResultDto(Post post) {
+    public static PostResponseDto.UpdateResultDto toUpdateResultDTO(Post post) {
         return PostResponseDto.UpdateResultDto.builder()
                 .postId(post.getId())
                 .updatedAt(LocalDateTime.now())
@@ -75,6 +82,23 @@ public class PostController {
                 .title(request.getTitle())
                 .content(request.getContent())
                 .imageUrl(request.getImageUrl())
+                .build();
+    }
+
+    @PatchMapping("/{postId}")
+    public ApiResponse<PostResponseDto.DeleteResultDto> deletePost(
+            HttpServletRequest request,
+            @PathVariable Integer postId) {
+        User user = AuthUtil.getUserFromRequest(request, authServiceImpl);
+        Post post = postService.deletePost(postId, user);
+        return ApiResponse.onSuccess(toDeleteResultDTO(post));
+    }
+
+    public static PostResponseDto.DeleteResultDto toDeleteResultDTO(Post post) {
+        return PostResponseDto.DeleteResultDto.builder()
+                .postId(post.getId())
+                .status(post.getStatus())
+                .deletedAt(LocalDateTime.now())
                 .build();
     }
 }

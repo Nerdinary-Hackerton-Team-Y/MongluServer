@@ -1,13 +1,5 @@
 package com.mongle.api.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.transaction.Transactional;
-
-import org.springframework.stereotype.Service;
-
 import com.mongle.api.controller.PostController;
 import com.mongle.api.domain.Comment;
 import com.mongle.api.domain.Hashtag;
@@ -16,14 +8,18 @@ import com.mongle.api.domain.User;
 import com.mongle.api.domain.enums.Status;
 import com.mongle.api.domain.mapping.PostHashtag;
 import com.mongle.api.dto.post.PostRequestDto;
+import com.mongle.api.exception.GeneralException;
 import com.mongle.api.exception.handler.PostHandler;
 import com.mongle.api.repository.HashtagRepository;
 import com.mongle.api.repository.PostHashtagRepository;
 import com.mongle.api.repository.PostRepository;
 import com.mongle.api.response.code.status.ErrorStatus;
-import com.mongle.api.util.AuthUtil;
-
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +31,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Post createPost(PostRequestDto.CreateDto request, HttpServletRequest authorizationHeader) {
+    public Post createPost(PostRequestDto.CreateDto request, User user) {
         Post newPost = PostController.toPost(request);
         newPost.setUser(user); // Set the user
         newPost.setStatus(Status.ACTIVATED); // Set the status
@@ -67,7 +63,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Post updatePost(PostRequestDto.UpdateDto request, Integer postId, String authorizationHeader) {
+    public Post updatePost(PostRequestDto.UpdateDto request, Integer postId, User user) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostHandler(ErrorStatus.POST_NOT_FOUND));
 
@@ -76,5 +72,21 @@ public class PostServiceImpl implements PostService {
         post.setImageUrl(request.getImageUrl());
 
         return postRepository.save(post);
+    }
+
+    @Override
+    @Transactional
+    public Post deletePost(Integer postId, User user) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostHandler(ErrorStatus.POST_NOT_FOUND));
+
+        post.setStatus(Status.DEACTIVATED); // Set the status to 'DELETED'
+
+        return postRepository.save(post);
+    }
+
+    public Post findById(Integer postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.POST_NOT_FOUND));
     }
 }
