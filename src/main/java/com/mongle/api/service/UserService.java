@@ -16,4 +16,14 @@ public class UserService {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
     }
+
+    public void updateProfileImage(User user, String fileUrl) {
+        user.setProfileImageUrl(fileUrl);
+        userRepository.save(user);
+    }
+
+    public void deleteProfileImage(User user) {
+        user.setProfileImageUrl(null);
+        userRepository.save(user);
+    }
 }
