@@ -32,6 +32,7 @@ CREATE TABLE `Post` (
                         `userId` int,
                         `questId` int,
                         `imageUrl` varchar(100),
+                        `title` varchar(100),
                         `content` varchar(100),
                         `isQuest` int,
                         `status` enum('activated', 'deactivated'),
