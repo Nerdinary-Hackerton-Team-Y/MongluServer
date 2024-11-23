@@ -21,11 +21,17 @@ public class Post extends BaseEntity {
     @Column(columnDefinition = "VARCHAR(100)")
     private String imageUrl;
 
+    @Column(columnDefinition = "VARCHAR(100)")
+    private String title;
+
     @Column(columnDefinition = "TEXT")
     private String content;
 
     @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean isQuest;
+
+    @Column(columnDefinition = "INTEGER")
+    private Integer rank;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Like> likeList = new ArrayList<>();
