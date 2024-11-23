@@ -18,6 +18,7 @@ public class Hashtag extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(columnDefinition = "VARCHAR(100)")
     private String tag;
 
     @OneToMany(mappedBy = "hashtag", cascade = CascadeType.ALL)

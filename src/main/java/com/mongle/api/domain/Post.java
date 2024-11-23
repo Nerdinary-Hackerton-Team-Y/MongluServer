@@ -18,10 +18,13 @@ public class Post extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(columnDefinition = "VARCHAR(100)")
     private String imageUrl;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean isQuest;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)

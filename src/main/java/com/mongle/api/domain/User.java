@@ -17,14 +17,19 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false, columnDefinition = "VARCHAR(100)")
     private String name;
 
+    @Column(nullable = false, columnDefinition = "VARCHAR(100)")
     private String username;
 
+    @Column(nullable = false, columnDefinition = "VARCHAR(100)")
     private String nickname;
 
+    @Column(nullable = false, columnDefinition = "VARCHAR(100)")
     private String password;
 
+    @Column(columnDefinition = "VARCHAR(20)")
     private String profilePictureUrl;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
