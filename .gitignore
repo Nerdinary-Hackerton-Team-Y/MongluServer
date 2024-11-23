@@ -1,1 +1,9 @@
 .gradle/
+.settings/
+bin/
+build/
+.classpath
+.env
+.factorypath
+.project
+*.pem
