@@ -92,4 +92,3 @@ CREATE TABLE `post_hashtag` (
   FOREIGN KEY (`post_id`) REFERENCES `post`(`id`),
   FOREIGN KEY (`hashtag_id`) REFERENCES `hashtag`(`id`)
 );
-
