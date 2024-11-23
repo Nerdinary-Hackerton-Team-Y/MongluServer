@@ -1,10 +1,12 @@
 package com.mongle.api.response.code.status;
 
+import org.springframework.http.HttpStatus;
+
 import com.mongle.api.response.code.BaseErrorCode;
 import com.mongle.api.response.code.ErrorReasonDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
@@ -20,6 +22,7 @@ public enum ErrorStatus implements BaseErrorCode {
     // 멤버 관려 에러
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4001", "사용자가 없습니다."),
     NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수 입니다."),
+    DUPLICATED_USERNAME(HttpStatus.BAD_REQUEST, "MEMBER4003", "이미 등록된 사용자입니다."),
 
     // 예시,,,
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "POST4001", "게시글이 없습니다."),
