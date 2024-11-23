@@ -1,9 +1,8 @@
 package com.mongle.api.controller;
 
 import com.mongle.api.response.ApiResponse;
-import com.mongle.api.response.code.status.SuccessStatus;
 import com.mongle.api.service.S3Service;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,9 +11,10 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/s3")
+@RequiredArgsConstructor
 public class S3Controller {
 
-    private S3Service s3Service;
+    private final S3Service s3Service;
 
     @PostMapping
     public ResponseEntity<ApiResponse> uploadFile(
