@@ -20,6 +20,19 @@ jobs:
       - name: Show git status
         run: git status
 
+      - name: Prepare SSH connect
+        env:
+          private_key: ${{ secrets.EC2_PRIVATE_KEY }}
+        run: |
+          echo "target host: ${host}"
+          echo "target username: ${username}"
+          echo "$private_key" > private_key.pem
+          chmod 400 private_key.pem
+          mkdir ~/.ssh
+          echo "try adding known host"
+          ssh-keyscan -t rsa $host > ~/.ssh/known_hosts
+
+
       - name: Setup Java JDK
         uses: actions/setup-java@v4.2.1
         with:
@@ -33,15 +46,6 @@ jobs:
         run: |
           chmod 755 gradlew
           ./gradlew bootJar
-
-      - name: Prepare SSH connect
-        env:
-          private_key: ${{ secrets.EC2_PRIVATE_KEY }}
-        run: |
-          echo "$private_key" > private_key.pem
-          chmod 400 private_key.pem
-          mkdir ~/.ssh
-          ssh-keyscan -t rsa $host > ~/.ssh/known_hosts
 
       - name: Upload deployment scripts
         run: |
