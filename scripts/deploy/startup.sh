@@ -9,7 +9,6 @@ if [ -n "$pid" ]; then
   exit 1
 fi
 
-source ~/.env
-nohup sudo java -jar server.jar --spring.profiles.active=dev > out.log 2>&1 & disown
+nohup sudo env $(cat .env | grep -v '^#' | xargs) java -jar server.jar --spring.profiles.active=dev > out.log 2>&1 & disown
 echo "server started at port 80."
 echo "stdout & stderr directed to 'out.log'"
