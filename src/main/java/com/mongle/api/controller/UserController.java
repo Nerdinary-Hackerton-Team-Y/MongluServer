@@ -2,7 +2,6 @@ package com.mongle.api.controller;
 
 import com.mongle.api.domain.User;
 import com.mongle.api.response.ApiResponse;
-import com.mongle.api.service.AuthServiceImpl;
 import com.mongle.api.service.S3Service;
 import com.mongle.api.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,4 +39,16 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.onSuccess(fileUrl));
     }
 
+    @DeleteMapping("/profile")
+    public ResponseEntity<ApiResponse> uploadProfileImage(HttpServletRequest request) {
+        User user = authController.getUserInfo(request);
+
+        if (user.getProfilePictureUrl() != null) {
+            String fileName = user.getProfilePictureUrl().substring(user.getProfilePictureUrl().lastIndexOf("/") + 1);
+            s3Service.deleteFile("profile", fileName);
+            userService.deleteProfileImage(user);
+        }
+
+        return ResponseEntity.ok(ApiResponse.onSuccess("프로필 사진 삭제 성공"));
+    }
 }

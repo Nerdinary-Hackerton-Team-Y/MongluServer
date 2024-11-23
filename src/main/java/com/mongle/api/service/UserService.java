@@ -21,4 +21,9 @@ public class UserService {
         user.setProfileImageUrl(fileUrl);
         userRepository.save(user);
     }
+
+    public void deleteProfileImage(User user) {
+        user.setProfileImageUrl(null);
+        userRepository.save(user);
+    }
 }
