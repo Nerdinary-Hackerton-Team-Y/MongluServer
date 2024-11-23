@@ -49,7 +49,8 @@ public class PostController {
     @GetMapping
     public List<PostResponseDto> getPosts(
         @RequestParam(name = "order") int order,
-        @RequestParam(name = "hashtag", required = false) String hashtag
+        @RequestParam(name = "hashtag", required = false) String hashtag,
+        @RequestParam(name = "isquest", required = false) Boolean isquest
     ) {
         List<String> hashtagList;
         if (hashtag == null)
@@ -58,9 +59,9 @@ public class PostController {
             hashtagList = List.of(hashtag);
 
         if (order == 0)
-            return postService.getPosts(hashtagList, Order.Date);
+            return postService.getPosts(hashtagList, Order.Date, isquest);
         else
-            return postService.getPosts(hashtagList, Order.Score);
+            return postService.getPosts(hashtagList, Order.Score, isquest);
     }
 
     @GetMapping("/me")

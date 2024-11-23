@@ -55,7 +55,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PostResponseDto> getPosts(List<String> hashtag, Order order) {
+    public List<PostResponseDto> getPosts(List<String> hashtag, Order order, Boolean isquest) {
         List<Post> posts;
 
         if (order == Order.Date) {
@@ -70,6 +70,14 @@ public class PostServiceImpl implements PostService {
                         return p.getPostHashtagList().stream().anyMatch(ph -> ph.getHashtag().getTag().equals(hashtag.get(0)));
                     })
                     .toList();
+        }
+
+        if (isquest != null) {
+            posts = posts.stream()
+                    .filter(p -> {
+                return p.getIsQuest().equals(isquest);
+                })
+                .toList();
         }
 
         return posts.stream()
