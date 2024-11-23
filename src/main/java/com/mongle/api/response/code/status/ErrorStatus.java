@@ -33,7 +33,10 @@ public enum ErrorStatus implements BaseErrorCode {
     FILE_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "FILE4003", "파일 삭제에 실패했습니다."),
 
     // Comment
-    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT4001", "댓글이 없습니다.");
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT4001", "댓글이 없습니다."),
+
+    // quest
+    QUEST_NOT_FOUND(HttpStatus.NOT_FOUND, "QUEST4001", "퀘스트가 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

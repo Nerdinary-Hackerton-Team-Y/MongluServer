@@ -29,7 +29,7 @@ public class PostResponseDto {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .isQuest(post.getIsQuest())
-                .score(post.getScore())
+//                .score(post.getScore())
                 .build();
     }
 

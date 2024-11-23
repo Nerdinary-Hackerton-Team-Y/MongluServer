@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mongle.api.controller.PostController;
 import com.mongle.api.domain.Hashtag;
 import com.mongle.api.domain.Post;
+import com.mongle.api.domain.Quest;
 import com.mongle.api.domain.User;
 import com.mongle.api.domain.enums.Order;
 import com.mongle.api.domain.enums.Status;
@@ -20,6 +21,7 @@ import com.mongle.api.exception.handler.PostHandler;
 import com.mongle.api.repository.HashtagRepository;
 import com.mongle.api.repository.PostHashtagRepository;
 import com.mongle.api.repository.PostRepository;
+import com.mongle.api.repository.QuestRepository;
 import com.mongle.api.response.code.status.ErrorStatus;
 
 import lombok.RequiredArgsConstructor;
@@ -28,8 +30,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
+    private final AuthService authService;
     private final PostHashtagRepository postHashtagRepository;
     private final HashtagRepository hashtagRepository;
+    private final QuestRepository questRepository;
 
 
     @Override
@@ -76,8 +80,13 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public Post createPost(PostRequestDto.CreateDto request, User user) {
+        // Validate quest_id
+        Quest quest = questRepository.findById(request.getQuestId())
+                .orElseThrow(() -> new GeneralException(ErrorStatus.QUEST_NOT_FOUND));
+
         Post newPost = PostController.toPost(request);
         newPost.setUser(user); // Set the user
+        newPost.setQuest(quest); // Set the quest
         newPost.setStatus(Status.ACTIVATED);
 
         List<Hashtag> hashtags = request.getHashtags().stream()
@@ -113,7 +122,7 @@ public class PostServiceImpl implements PostService {
 
         post.setTitle(request.getTitle());
         post.setContent(request.getContent());
-        post.setImageUrl(request.getImageUrl());
+        post.setImageUrl(String.valueOf(request.getImageUrl()));
 
         return postRepository.save(post);
     }
