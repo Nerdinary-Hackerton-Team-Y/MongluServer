@@ -1,17 +1,15 @@
 package com.mongle.api.controller;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import com.mongle.api.dto.comment.CommentResDto;
+import com.mongle.api.service.CommentService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.mongle.api.domain.Post;
 import com.mongle.api.domain.Quest;
@@ -31,9 +29,13 @@ import lombok.RequiredArgsConstructor;
 public class PostController {
     private final PostService postService;
     private final AuthServiceImpl authServiceImpl;
+    private final AuthController authController;
+    private final CommentService commentService;
 
     @PostMapping("/")
-    public ApiResponse<PostResponseDto.CreateResultDto> createPost(HttpServletRequest request, @RequestBody @Valid PostRequestDto.CreateDto postRequest) {
+    public ApiResponse<PostResponseDto.CreateResultDto> createPost(
+            HttpServletRequest request,
+            @RequestBody @Valid PostRequestDto.CreateDto postRequest) {
         User user = AuthUtil.getUserFromRequest(request, authServiceImpl);
         Post post = postService.createPost(postRequest, user);
         return ApiResponse.onSuccess(toCreateResultDto(post));
@@ -99,4 +101,11 @@ public class PostController {
                 .build();
     }
 
+    @GetMapping("/user")
+    public ResponseEntity<ApiResponse> getUserCommentedPosts(HttpServletRequest request) {
+        User user = authController.getUserInfo(request);
+        List<PostResponseDto> commentedPosts = commentService.findPostsByUserId(user.getId());
+
+        return ResponseEntity.ok(ApiResponse.onSuccess(commentedPosts));
+    }
 }

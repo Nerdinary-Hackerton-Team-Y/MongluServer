@@ -50,11 +50,4 @@ public class CommentController {
         return ResponseEntity.ok(ApiResponse.onSuccess(commentListResDto));
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<ApiResponse> getUserComments(HttpServletRequest request) {
-        User user = authController.getUserInfo(request);
-        List<CommentResDto> commentListResDto = commentService.findByUserId(user.getId());
-
-        return ResponseEntity.ok(ApiResponse.onSuccess(commentListResDto));
-    }
 }

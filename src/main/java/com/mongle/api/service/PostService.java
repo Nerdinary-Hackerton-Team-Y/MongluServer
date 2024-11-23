@@ -9,5 +9,5 @@ public interface PostService {
     Post updatePost(PostRequestDto.UpdateDto request, Integer postId, User user);
     Post deletePost(Integer postId, User user);
 
-    void uploadPostImage(User user, String fileUrl);
+    Post findById(Integer postId);
 }
