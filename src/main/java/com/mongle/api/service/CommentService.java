@@ -3,6 +3,7 @@ package com.mongle.api.service;
 import java.util.List;
 import java.util.Objects;
 
+import com.mongle.api.dto.post.PostResponseDto;
 import org.springframework.stereotype.Service;
 
 import com.mongle.api.domain.Comment;
@@ -22,13 +23,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class CommentService {
-    private final PostRepository PostRepository;
+    private final PostService postService;
     private final UserService userService;
     private final CommentRepository commentRepository;
 
     public CommentResDto createComment(Integer postId, Integer userId, CommentReqDto commentReqDto) {
-        Post post = PostRepository.findById(postId)
-                .orElseThrow();
+        Post post = postService.findById(postId);
         User user = userService.findById(userId);
 
         Comment comment = Comment.builder()
@@ -67,11 +67,13 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
-    public List<CommentResDto> findByUserId(Integer userId) {
+    public List<PostResponseDto> findPostsByUserId(Integer userId) {
         List<Comment> comments = commentRepository.findByUserId(userId);
 
         return comments.stream()
-                .map(CommentResDto::new)
+                .map(Comment::getPost)
+                .distinct()
+                .map(PostResponseDto::of)
                 .toList();
     }
 }
